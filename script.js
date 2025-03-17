@@ -231,7 +231,7 @@ function setupVisualChallenges() {
     ],
     'ermita': [
       { question: '¿Qué rodea la ermita?', options: ['Parques', 'Montañas', 'Ciudad'], correct: 'Parques' },
-      { question: '¿Qué imagen, traìda de Italia, hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen del siglo XVI' }
+      { question: '¿Qué imagen, traìda de Italia, hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen' }
     ],
     'puente': [
       { question: '¿Qué material predomina?', options: ['Madera', 'Piedra', 'Ladrillo'], correct: 'Piedra' },
