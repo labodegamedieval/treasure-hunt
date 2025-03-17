@@ -291,7 +291,7 @@ function setupQuiz() {
     'iglesia': [
       { question: '¿En qué siglo comenzó esta iglesia?', options: ['XIII', 'XIV', 'XV'], correct: 'XIII' },
       { question: '¿Qué estilo tiene la puerta?', options: ['Gótico-mudéjar', 'Románico', 'Barroco'], correct: 'Gótico-mudéjar' },
-      { question: '¿Cuántas campanas hay en el campanario?', options: ['4', '3', '5'], correct: '5' }
+      { question: '¿Cuántas campanas hay en el campanario?', options: ['4', '3', '6'], correct: '6' }
     ],
     'fuente': [
       { question: '¿En qué siglo se construyó esta fuente?', options: ['XV', 'XVI', 'XVII'], correct: 'XVI' },
