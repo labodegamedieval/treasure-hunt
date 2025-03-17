@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🙏 La Ermita de Gonzalo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🙏 La Ermita de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+      <div class="stop-selector">
+        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
+        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza de toros</button>
+        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
+        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
+        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
+        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
+        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
+      </div>
+    </header>
+
+    <section id="content">
+      <div class="stop-icon">🙏</div>
+      <div id="location-check">
+        <h2>Verifica tu ubicación</h2>
+        <p>Acércate a la estela romana para continuar la búsqueda del mensaje.</p>
+        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
+        <p>O ingresa el nombre:</p>
+        <input type="text" id="location-input" placeholder="Ej: Ermita">
+        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
+        <p id="location-status"></p>
+      </div>
+
+      <div id="game-content" style="display: none;">
+        <div class="content-wrapper">
+          <div class="carousel">
+            <div class="slide active" data-slide="0">
+              <img src="images/ermita-exterior.jpg" alt="Exterior de la Ermita">
+              <p class="carousel-info">
+                <strong>Exterior:</strong> Siglo XV, cerca del río Canderuelo. <span class="hidden-detail" onclick="revealHint('La paz de los bosques guarda el mensaje.')">¡Busca aquí!</span>
+              </p>
+            </div>
+            <div class="slide" data-slide="1">
+              <img src="images/ermita-virgen.jpg" alt="Virgen del Socorro">
+              <p class="carousel-info">
+                <strong>Virgen:</strong> Imagen de madera policromada del siglo XVI.
+              </p>
+            </div>
+            <div class="slide" data-slide="2">
+              <img src="images/ermita-camino.jpg" alt="Parque Circundante">
+              <p class="carousel-info">
+                <strong>Bosque:</strong> Lugar de peregrinación junto al río Canderuelo en la calzada romana.
+              </p>
+            </div>
+            <button class="carousel-btn prev-slide">←</button>
+            <button class="carousel-btn next-slide">→</button>
+          </div>
+
+          <div class="visual-challenge">
+            <h2>Retos Visuales: Observa con atención</h2>
+            <p>1. ¿Qué rodea la ermita?</p>
+            <div id="visual-opciones-1">
+              <button class="action-btn" onclick="checkVisualAnswer('Parques', 'Parques', 1)">Parques</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Montañas', 'Parques', 1)">Montañas</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Ciudad', 'Parques', 1)">Ciudad</button>
+            </div>
+            <p id="visual-resultado-1"></p>
+            <button class="hint-btn" onclick="showHint('No es ciudad ni montañas.')">Pista</button>
+
+            <p>2. ¿Qué imagen hay dentro?</p>
+            <div id="visual-opciones-2">
+              <button class="action-btn" onclick="checkVisualAnswer('Virgen', 'Virgen', 2)">Virgen</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Cruz', 'Virgen', 2)">Cruz</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Santo', 'Virgen', 2)">Santo</button>
+            </div>
+            <p id="visual-resultado-2"></p>
+            <button class="hint-btn" onclick="showHint('Es de madera policromada.')">Pista</button>
+          </div>
+        </div>
+
+        <div class="quiz">
+          <h2>Quiz: Descubre el mensaje</h2>
+          <p>1. ¿En qué siglo se edificó esta ermita?</p>
+          <div id="quiz-opciones-1">
+            <button class="action-btn" onclick="checkAnswer('XIV', 'XV', 1)">XIV</button>
+            <button class="action-btn" onclick="checkAnswer('XV', 'XV', 1)">XV</button>
+            <button class="action-btn" onclick="checkAnswer('XVI', 'XV', 1)">XVI</button>
+          </div>
+          <p id="quiz-resultado-1"></p>
+          <button class="hint-btn" onclick="showHint('Entre XIV y XVI.')">Pista</button>
+
+          <p>2. ¿Qué río está cerca?</p>
+          <div id="quiz-opciones-2">
+            <button class="action-btn" onclick="checkAnswer('Canderuelo', 'Canderuelo', 2)">Canderuelo</button>
+            <button class="action-btn" onclick="checkAnswer('Francia', 'Canderuelo', 2)">Francia</button>
+            <button class="action-btn" onclick="checkAnswer('Duero', 'Canderuelo', 2)">Duero</button>
+          </div>
+          <p id="quiz-resultado-2"></p>
+          <button class="hint-btn" onclick="showHint('Cruza el pueblo.')">Pista</button>
+
+          <p>3. ¿Qué siglo es la Virgen?</p>
+          <div id="quiz-opciones-3">
+            <button class="action-btn" onclick="checkAnswer('XV', 'XVI', 3)">XV</button>
+            <button class="action-btn" onclick="checkAnswer('XVI', 'XVI', 3)">XVI</button>
+            <button class="action-btn" onclick="checkAnswer('XVII', 'XVI', 3)">XVII</button>
+          </div>
+          <p id="quiz-resultado-3"></p>
+          <button class="hint-btn" onclick="showHint('Es posterior a la ermita.')">Pista</button>
+        </div>
+
+        <div id="continue-button" style="display: none;">
+          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=ermita'">Continuar búsqueda</button>
+        </div>
+
+        <p class="info">
+          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">"sin"</span><br>
+          <strong>QR en el pueblo:</strong> ERMITA-1523 (cerca del río).<br>
+          <strong>Dato Curioso:</strong> Siguiendo la Calzada Romana observamos al final, la Ermita del Humilladero. Es posible que en su origen hubiese sido simplemente una cruz de piedra o madera, a la que posteriormente se le daría una cubierta para protegerla de la intemperie. La puerta de forja es original del siglo XVI.
+        </p>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

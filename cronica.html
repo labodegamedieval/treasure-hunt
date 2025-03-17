@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📜 Crónica del Viaje</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+  <style>
+    .diary-entries p { margin: 10px 0; font-style: italic; }
+    .progress-stars { font-size: 1.5em; margin: 10px 0; }
+    .secret-section { text-align: center; margin: 20px 0; }
+    .secret-section img { width: 100%; max-width: 500px; border-radius: 5px; }
+    .secret-section p { font-style: italic; color: #6b3e2e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📜 Crónica del Viaje de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <p>Lee las palabras de Gonzalo, escritas hace cinco siglos, mientras exploras las paradas de San Martín del Castañar. Cada fragmento que descubras te acercará al mensaje oculto… y a un secreto que solo los valientes pueden desentrañar en persona.</p>
+
+      <div class="diary-entries">
+        <p><strong>1523 - El Castillo:</strong> "Bajo las almenas, donde el viento susurra leyendas, supe que mi secreto debía permanecer… oculto." <span id="msg-castillo"></span></p>
+        <p><strong>1524 - La Plaza:</strong> "Entre el bullicio de las capeas, hallé el lugar perfecto, un rincón donde nadie miraría: en…" <span id="msg-plaza"></span></p>
+        <p><strong>1525 - La Iglesia:</strong> "Arrodillado ante el altar, la claridad me llegó como un destello divino: debía esconderlo en la…" <span id="msg-iglesia"></span></p>
+        <p><strong>1526 - Fuente y Portalón:</strong> "El agua pura del Canderuelo me habló, y supe que el escondite sería una… bodega." <span id="msg-fuente"></span></p>
+        <p><strong>1527 - La Ermita:</strong> "En la calma del bosque, junto al río, decidí que mi secreto estaría… sin…" <span id="msg-ermita"></span></p>
+        <p><strong>1528 - El Puente:</strong> "Crucé el viejo puente y sentí el peso del pasado; allí dejé mi marca, un… escudo." <span id="msg-puente"></span></p>
+        <p><strong>1529 - La Bodega:</strong> "En estas paredes de piedra, donde el vino guarda memorias, yace mi verdad más profunda." <span id="msg-bodega"></span></p>
+      </div>
+
+      <div class="progress">
+        <h2>Progreso de tu Viaje</h2>
+        <p id="progress-text">Paradas completadas: 0/7</p>
+        <div class="progress-stars" id="progress-stars">☆☆☆☆☆☆☆</div>
+      </div>
+
+      <div id="treasure-reveal" style="display: none;">
+        <h2>¡El Mensaje Oculto de Gonzalo!</h2>
+        <p id="message-reveal">"Oculto en la bodega sin escudo"</p>
+        <p>Has desentrañado el mensaje de Gonzalo, noble aventurero. Pero el verdadero secreto, aquel que guarda el escudo borrado, solo puede revelarse en persona…</p>
+
+        <div class="secret-section">
+          <img src="images/bodega-secreta.jpg" alt="Interior de la Bodega Medieval">
+          <p>En las profundidades de La Bodega Medieval, entre barriles que guardan siglos de historia y el eco de antiguas promesas, te espera un secreto olvidado. ¿Te atreves a descubrirlo?</p>
+          <button class="action-btn" onclick="window.location.href='https://www.labodegamedieval.es'">Reserva tu Experiencia</button>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="action-btn" onclick="window.location.href='index.html'">Inicio</button>
+        <button class="action-btn" onclick="window.location.href='explorar.html'">Explorar</button>
+        <button class="action-btn" onclick="checkFinal()">Desvelar el Mensaje</button>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stops = ['castillo', 'plaza', 'iglesia', 'fuente', 'ermita', 'puente', 'bodega'];
+      let completedCount = 0;
+
+      // Mostrar fragmentos del mensaje
+      stops.forEach(stop => {
+        const msgSpan = document.getElementById(`msg-${stop}`);
+        const messagePiece = localStorage.getItem(`message-${stop}`);
+        if (messagePiece !== null) {
+          msgSpan.textContent = ` - Fragmento: "${messagePiece}"`;
+          completedCount++;
+        }
+      });
+
+      // Actualizar estrellitas de progreso
+      const starsElement = document.getElementById('progress-stars');
+      let stars = '';
+      for (let i = 0; i < 7; i++) {
+        stars += i < completedCount ? '⭐' : '☆';
+      }
+      starsElement.textContent = stars;
+
+      // Actualizar texto de progreso
+      document.getElementById('progress-text').textContent = `Paradas completadas: ${completedCount}/7`;
+
+      // Mostrar mensaje oculto si todas las paradas están completadas
+      if (completedCount === 7) {
+        document.getElementById('treasure-reveal').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

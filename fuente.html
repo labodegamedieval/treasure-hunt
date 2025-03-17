@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⛲ Fuente y Portalón de Gonzalo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⛲ Fuente y Portalón de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+      <div class="stop-selector">
+        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
+        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza de toros</button>
+        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
+        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
+        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
+        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
+        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
+      </div>
+    </header>
+
+    <section id="content">
+      <div class="stop-icon">⛲</div>
+      <div id="location-check">
+        <h2>Verifica tu ubicación</h2>
+        <p>Acércate a beber al caño mas alto de la Fuente para continuar la búsqueda del mensaje.</p>
+        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
+        <p>O ingresa el nombre:</p>
+        <input type="text" id="location-input" placeholder="Ej: Fuente y Portalón">
+        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
+        <p id="location-status"></p>
+      </div>
+
+      <div id="game-content" style="display: none;">
+        <div class="content-wrapper">
+          <div class="carousel">
+            <div class="slide active" data-slide="0">
+              <img src="images/portalon.jpeg" alt="Portalón">
+              <p class="carousel-info">
+                <strong>Portalón:</strong> Siglo XVI, renacentista, lugar de reunion y comercio. <span class="hidden-detail" onclick="revealHint('Una cara te observa.')">¡Busca aquí!</span>
+              </p>
+            </div>
+            <div class="slide" data-slide="1">
+              <img src="images/fuente-detalle.jpg" alt="Detalles Geométricos">
+              <p class="carousel-info">
+                <strong>Detalles:</strong> Pilares de piedra tallados con motivos geométricos e inscripciones talladas.
+              </p>
+            </div>
+            <div class="slide" data-slide="2">
+              <img src="images/portalon-columna.jpeg" alt="Plaza Central">
+              <p class="carousel-info">
+                <strong>Plaza:</strong> Punto de encuentro social y comercial.
+              </p>
+            </div>
+            <button class="carousel-btn prev-slide">←</button>
+            <button class="carousel-btn next-slide">→</button>
+          </div>
+
+          <div class="visual-challenge">
+            <h2>Retos Visuales: Observa con atención</h2>
+            <p>1. ¿Cuántos caños tiene la fuente?</p>
+            <div id="visual-opciones-1">
+              <button class="action-btn" onclick="checkVisualAnswer('Un caño', 'Dos caños', 1)">Un caño</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Dos caños', 'Dos caños', 1)">Dos caños</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Tres caños', 'Dos caños', 1)">Tres caños</button>
+            </div>
+            <p id="visual-resultado-1"></p>
+            <button class="hint-btn" onclick="showHint('No es uno ni tres.')">Pista</button>
+
+            <p>2. ¿Qué decora los caños?</p>
+            <div id="visual-opciones-2">
+              <button class="action-btn" onclick="checkVisualAnswer('Flores', 'Geométricos', 2)">Flores</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Geométricos', 'Geométricos', 2)">Geométricos</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Animales', 'Geométricos', 2)">Animales</button>
+            </div>
+            <p id="visual-resultado-2"></p>
+            <button class="hint-btn" onclick="showHint('Son formas abstractas.')">Pista</button>
+          </div>
+        </div>
+
+        <div class="quiz">
+          <h2>Quiz: Descubre el mensaje</h2>
+          <p>1. ¿En qué siglo se construyó esta fuente?</p>
+          <div id="quiz-opciones-1">
+            <button class="action-btn" onclick="checkAnswer('XV', 'XVI', 1)">XV</button>
+            <button class="action-btn" onclick="checkAnswer('XVI', 'XVI', 1)">XVI</button>
+            <button class="action-btn" onclick="checkAnswer('XVII', 'XVI', 1)">XVII</button>
+          </div>
+          <p id="quiz-resultado-1"></p>
+          <button class="hint-btn" onclick="showHint('Fue después del XV.')">Pista</button>
+
+          <p>2. ¿Qué estilo es la fuente?</p>
+          <div id="quiz-opciones-2">
+            <button class="action-btn" onclick="checkAnswer('Renacentista', 'Renacentista', 2)">Renacentista</button>
+            <button class="action-btn" onclick="checkAnswer('Gótico', 'Renacentista', 2)">Gótico</button>
+            <button class="action-btn" onclick="checkAnswer('Barroco', 'Renacentista', 2)">Barroco</button>
+          </div>
+          <p id="quiz-resultado-2"></p>
+          <button class="hint-btn" onclick="showHint('Es del siglo XVI.')">Pista</button>
+
+          <p>3. ¿Qué río pasa cerca?</p>
+          <div id="quiz-opciones-3">
+            <button class="action-btn" onclick="checkAnswer('Canderuelo', 'Canderuelo', 3)">Canderuelo</button>
+            <button class="action-btn" onclick="checkAnswer('Miño', 'Canderuelo', 3)">Francia</button>
+            <button class="action-btn" onclick="checkAnswer('Tormes', 'Canderuelo', 3)">Tormes</button>
+          </div>
+          <p id="quiz-resultado-3"></p>
+          <button class="hint-btn" onclick="showHint('¿En serio? Està bien, se parece a ciruelo.')">Pista</button>
+        </div>
+
+        <div id="continue-button" style="display: none;">
+          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=fuente'">Continuar búsqueda</button>
+        </div>
+
+        <p class="info">
+          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">"bodega"</span><br>
+          <strong>QR en el pueblo:</strong> FUENTE-1523 (en la plaza central).<br>
+          <strong>Dato Curioso:</strong> Ya le preguntaré alguno a mis suegros jeje.
+        </p>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

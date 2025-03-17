@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⛪ La Iglesia de Gonzalo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⛪ La Iglesia de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+      <div class="stop-selector">
+        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
+        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza</button>
+        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
+        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
+        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
+        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
+        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
+      </div>
+    </header>
+
+    <section id="content">
+      <div class="stop-icon">⛪</div>
+      <div id="location-check">
+        <h2>Verifica tu ubicación</h2>
+        <p>Acércate a la estela romana en la entrada de la Iglesia para continuar la búsqueda del mensaje.</p>
+        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
+        <p>O ingresa el nombre:</p>
+        <input type="text" id="location-input" placeholder="Ej: Iglesia">
+        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
+        <p id="location-status"></p>
+      </div>
+
+      <div id="game-content" style="display: none;">
+        <div class="content-wrapper">
+          <div class="carousel">
+            <div class="slide active" data-slide="0">
+              <img src="images/iglesia.jpg" alt="Puerta de la Iglesia">
+              <p class="carousel-info">
+                <strong>Puerta:</strong> Gótico-mudéjar del siglo XIII. <span class="hidden-detail" onclick="revealHint('Columnas susurran el mensaje.')">¡Busca aquí!</span>
+              </p>
+            </div>
+            <div class="slide" data-slide="1">
+              <img src="images/iglesia-interior.jpg" alt="Interior Barroco">
+              <p class="carousel-info">
+                <strong>Interior:</strong> Retablos barrocos y bóvedas góticas añadidas en los siglos XVI-XVII.
+              </p>
+            </div>
+            <div class="slide" data-slide="2">
+              <img src="images/entrada-original.jpg" alt="Entrada Primitiva">
+              <p class="carousel-info">
+                <strong>Entrada primitiva:</strong> Del siglo XIII, orientada al norte.
+              </p>
+            </div>
+	    <div class="slide" data-slide="3">
+              <img src="images/campanario.jpg" alt="Campanario">
+              <p class="carousel-info">
+                <strong>Campanario:</strong> Del siglo XVII, hogar de cigüeñas.
+              </p>
+            </div>
+            <button class="carousel-btn prev-slide">←</button>
+            <button class="carousel-btn next-slide">→</button>
+          </div>
+
+          <div class="visual-challenge">
+            <h2>Retos Visuales: Observa con atención</h2>
+            <p>1. ¿Qué detalle destaca en la fachada?</p>
+            <div id="visual-opciones-1">
+              <button class="action-btn" onclick="checkVisualAnswer('Columnas jónicas', 'Columnas jónicas', 1)">Columnas jónicas</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Vitrales', 'Columnas jónicas', 1)">Vitrales</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Reloj', 'Columnas jónicas', 1)">Reloj</button>
+            </div>
+            <p id="visual-resultado-1"></p>
+            <button class="hint-btn" onclick="showHint('No son vitrales ni reloj.')">Pista</button>
+
+            <p>2. ¿Qué hay en el interior?</p>
+            <div id="visual-opciones-2">
+              <button class="action-btn" onclick="checkVisualAnswer('Retablos', 'Retablos', 2)">Retablos</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Pinturas', 'Retablos', 2)">Pinturas</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Esculturas', 'Retablos', 2)">Esculturas</button>
+            </div>
+            <p id="visual-resultado-2"></p>
+            <button class="hint-btn" onclick="showHint('Son barrocos.')">Pista</button>
+          </div>
+        </div>
+
+        <div class="quiz">
+          <h2>Quiz: Descubre el mensaje</h2>
+          <p>1. ¿En qué siglo comenzó esta iglesia?</p>
+          <div id="quiz-opciones-1">
+            <button class="action-btn" onclick="checkAnswer('XIII', 'XIII', 1)">XIII</button>
+            <button class="action-btn" onclick="checkAnswer('XIV', 'XIII', 1)">XIV</button>
+            <button class="action-btn" onclick="checkAnswer('XV', 'XIII', 1)">XV</button>
+          </div>
+          <p id="quiz-resultado-1"></p>
+          <button class="hint-btn" onclick="showHint('Fue antes del XIV.')">Pista</button>
+
+          <p>2. ¿Qué estilo tiene la puerta?</p>
+          <div id="quiz-opciones-2">
+            <button class="action-btn" onclick="checkAnswer('Gótico-mudéjar', 'Gótico-mudéjar', 2)">Gótico-mudéjar</button>
+            <button class="action-btn" onclick="checkAnswer('Románico', 'Gótico-mudéjar', 2)">Románico</button>
+            <button class="action-btn" onclick="checkAnswer('Barroco', 'Gótico-mudéjar', 2)">Barroco</button>
+          </div>
+          <p id="quiz-resultado-2"></p>
+          <button class="hint-btn" onclick="showHint('Combina gótico y mudéjar.')">Pista</button>
+
+          <p>3. ¿Cuantas campanas hay en el campanario?</p>
+          <div id="quiz-opciones-3">
+            <button class="action-btn" onclick="checkAnswer('4', '5', 3)">XVI</button>
+            <button class="action-btn" onclick="checkAnswer('3', '5', 3)">XVII</button>
+            <button class="action-btn" onclick="checkAnswer('5', '5', 3)">5</button>
+          </div>
+          <p id="quiz-resultado-3"></p>
+          <button class="hint-btn" onclick="showHint('Mira bien y cuéntalas.')">Pista</button>
+        </div>
+
+        <div id="continue-button" style="display: none;">
+          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=iglesia'">Continuar búsqueda</button>
+        </div>
+
+        <p class="info">
+          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">"la"</span><br>
+          <strong>QR en el pueblo:</strong> IGLESIA-1523 (junto al pórtico).<br>
+          <strong>Dato Curioso:</strong> En el siglo XVII se llevaron a cabo unas reparaciones en la nave principal de la Iglesia y se pagaron 6500 reales o 50 cantaros de vino por vecino durante cuatro años.
+        </p>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

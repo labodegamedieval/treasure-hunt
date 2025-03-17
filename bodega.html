@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍷 La Bodega de Gonzalo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🍷 La Bodega de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+      <div class="stop-selector">
+        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
+        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza de toros</button>
+        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
+        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
+        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
+        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
+        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
+      </div>
+    </header>
+
+    <section id="content">
+      <div class="stop-icon">🍷</div>
+      <div id="location-check">
+        <h2>Verifica tu ubicación</h2>
+        <p>Acércate a la Bodega Medieval para el clímax del mensaje.</p>
+        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
+        <p>O ingresa el nombre:</p>
+        <input type="text" id="location-input" placeholder="Ej: Bodega">
+        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
+        <p id="location-status"></p>
+      </div>
+
+      <div id="game-content" style="display: none;">
+        <div class="content-wrapper">
+          <div class="carousel">
+            <div class="slide active" data-slide="0">
+              <img src="images/bodega-medieval.jpg" alt="Entrada de la Bodega">
+              <p class="carousel-info">
+                <strong>Interior:</strong> Siglo XVI, recuperada cuidadosamente para ofrecer experiencia únicas de degustación con vinos exclusivos de uva Rufete y delicias de la Sierra de Francia. <span class="hidden-detail" onclick="revealHint('Un escudo borrado guarda el mensaje.')">¡Busca aquí!</span>
+              </p>
+            </div>
+            <div class="slide" data-slide="1">
+              <img src="images/bodega-barriles.jpeg" alt="Barriles Centenarios">
+              <p class="carousel-info">
+                <strong>Barriles:</strong> Madera que guarda sabores de siglos.
+              </p>
+            </div>
+            <div class="slide" data-slide="2">
+              <img src="images/bodega-escudo.jpeg" alt="Dintel Misterioso">
+              <p class="carousel-info">
+                <strong>Dintel:</strong> Un escudo de armas borrado susurra un misterio.
+              </p>
+            </div>
+	    <div class="slide" data-slide="3">
+              <img src="images/bodega-cueva.jpeg" alt="La Bodega de noche">
+              <p class="carousel-info">
+                <strong>Un lugar special:</strong> Piedras que guardan un secreto durante siglos.
+              </p>
+            </div>
+            <button class="carousel-btn prev-slide">←</button>
+            <button class="carousel-btn next-slide">→</button>
+          </div>
+
+          <div class="visual-challenge">
+            <h2>Retos Visuales: Observa con atención</h2>
+            <p>1. ¿Qué es esencial en esta bodega?</p>
+            <div id="visual-opciones-1">
+              <button class="action-btn" onclick="checkVisualAnswer('Barriles', 'Barriles', 1)">Barriles</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Ventanas', 'Barriles', 1)">Ventanas</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Puertas', 'Barriles', 1)">Puertas</button>
+            </div>
+            <p id="visual-resultado-1"></p>
+            <button class="hint-btn" onclick="showHint('No son ventanas ni puertas.')">Pista</button>
+
+            <p>2. ¿Qué hay en el dintel?</p>
+            <div id="visual-opciones-2">
+              <button class="action-btn" onclick="checkVisualAnswer('Escudo', 'Escudo', 2)">Escudo</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Inscripción', 'Escudo', 2)">Inscripción</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Relieve', 'Escudo', 2)">Relieve</button>
+            </div>
+            <p id="visual-resultado-2"></p>
+            <button class="hint-btn" onclick="showHint('Es borrado pero visible.')">Pista</button>
+          </div>
+        </div>
+
+        <div class="quiz">
+          <h2>Quiz: Descubre el mensaje</h2>
+          <p>1. ¿En qué siglo nació esta bodega?</p>
+          <div id="quiz-opciones-1">
+            <button class="action-btn" onclick="checkAnswer('XV', 'XVI', 1)">XV</button>
+            <button class="action-btn" onclick="checkAnswer('XVI', 'XVI', 1)">XVI</button>
+            <button class="action-btn" onclick="checkAnswer('XVII', 'XVI', 1)">XVII</button>
+          </div>
+          <p id="quiz-resultado-1"></p>
+          <button class="hint-btn" onclick="showHint('Después del XV.')">Pista</button>
+
+          <p>2. ¿El vino de qué uva se produce en la Sierra de Francia?</p>
+          <div id="quiz-opciones-2">
+            <button class="action-btn" onclick="checkAnswer('Rufete', 'Rufete', 2)"> Rufete</button>
+            <button class="action-btn" onclick="checkAnswer('Moscatel', 'Rufete', 2)">Color</button>
+            <button class="action-btn" onclick="checkAnswer('Pinot Noir', 'Rufete', 2)">Texto</button>
+          </div>
+          <p id="quiz-resultado-2"></p>
+          <button class="hint-btn" onclick="showHint('Rima con chupete.')">Pista</button>
+
+          <p>3. ¿Qué guarda la bodega?</p>
+          <div id="quiz-opciones-3">
+            <button class="action-btn" onclick="checkAnswer('Un secreto', 'Un secreto', 3)">Un secreto</button>
+            <button class="action-btn" onclick="checkAnswer('Oro', 'Un secreto', 3)">Oro</button>
+            <button class="action-btn" onclick="checkAnswer('Libros', 'Un secreto', 3)">Libros</button>
+          </div>
+          <p id="quiz-resultado-3"></p>
+          <button class="hint-btn" onclick="showHint('Si lo cuentas deja de serlo.')">Pista</button>
+        </div>
+
+        <div class="final-challenge">
+          <h2>Reto Final: El escudo borrado</h2>
+          <p>¿Qué falta en el escudo de armas?</p>
+          <input type="text" id="final-answer" placeholder="Tu respuesta">
+          <button class="action-btn" onclick="checkFinalAnswer()">Resolver</button>
+          <p id="final-resultado">El secreto espera en la Bodega Medieval...</p>
+          <button class="hint-btn" onclick="showHint('Está borrado, pero sigue siendo un símbolo.')">Pista</button>
+        </div>
+
+        <div id="continue-button" style="display: none;">
+          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=bodega'">Continuar búsqueda</button>
+        </div>
+
+        <p class="info">
+          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">""</span><br>
+          <strong>QR en el pueblo:</strong> BODEGA-1523 (en la barrica).<br>
+          <strong>Dato Curioso:</strong> Un secreto de cinco siglos te espera en una experiencia gastronómica única.
+        </p>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

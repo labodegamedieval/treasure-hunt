@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌉 El Puente Medieval</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌉 El Puente Medieval</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+      <div class="stop-selector">
+        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
+        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza de toros</button>
+        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
+        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
+        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
+        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
+        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
+      </div>
+    </header>
+
+    <section id="content">
+      <div class="stop-icon">🌉</div>
+      <div id="location-check">
+        <h2>Verifica tu ubicación</h2>
+        <p>Acércate al Puente Medieval sobre el río Canderuelo para continuar la búsqueda del mensaje.</p>
+        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
+        <p>O ingresa el nombre:</p>
+        <input type="text" id="location-input" placeholder="Ej: Puente">
+        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
+        <p id="location-status"></p>
+      </div>
+
+      <div id="game-content" style="display: none;">
+        <div class="content-wrapper">
+          <div class="carousel">
+            <div class="slide active" data-slide="0">
+              <img src="images/puente-medieval.jpg" alt="Puente Medieval">
+              <p class="carousel-info">
+                <strong>Puente:</strong> No esta claro el origen, el primer registro que hay sobre este puente es una reparación que se realizó a principios del siglo XV, cruza el río Canderuelo y conecta el pueblo con rutas comerciales a través de la calzada romana. <span class="hidden-detail" onclick="revealHint('Un arco lleva al mensaje.')">¡Busca aquí!</span>
+              </p>
+            </div>
+            <div class="slide" data-slide="1">
+              <img src="images/puente-arco.jpeg" alt="Arco de Piedra">
+              <p class="carousel-info">
+                <strong>Arco:</strong> Diseño robusto que resiste crecidas del Canderuelo.
+              </p>
+            </div>
+            <div class="slide" data-slide="2">
+              <img src="images/puente-entorno.jpeg" alt="Entorno Verde">
+              <p class="carousel-info">
+                <strong>Entorno:</strong> Camino medieval de vino y grano junto al río.
+              </p>
+            </div>
+	    <div class="slide" data-slide="3">
+              <img src="images/puente-sendero.jpeg" alt="Piedras del Puente">
+              <p class="carousel-info">
+                <strong>Entorno:</strong> Piedras centenarias, testigos del comercio medieval de vino y grano junto al río.
+              </p>
+            </div>
+            <button class="carousel-btn prev-slide">←</button>
+            <button class="carousel-btn next-slide">→</button>
+          </div>
+
+          <div class="visual-challenge">
+            <h2>Retos Visuales: Observa con atención</h2>
+            <p>1. ¿Qué material predomina?</p>
+            <div id="visual-opciones-1">
+              <button class="action-btn" onclick="checkVisualAnswer('Madera', 'Piedra', 1)">Madera</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Piedra', 'Piedra', 1)">Piedra</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Ladrillo', 'Piedra', 1)">Ladrillo</button>
+            </div>
+            <p id="visual-resultado-1"></p>
+            <button class="hint-btn" onclick="showHint('No es madera ni ladrillo.')">Pista</button>
+
+            <p>2. ¿Qué forma tiene el puente?</p>
+            <div id="visual-opciones-2">
+              <button class="action-btn" onclick="checkVisualAnswer('Arco', 'Arco', 2)">Arco</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Recto', 'Arco', 2)">Recto</button>
+              <button class="action-btn" onclick="checkVisualAnswer('Curvo', 'Arco', 2)">Curvo</button>
+            </div>
+            <p id="visual-resultado-2"></p>
+            <button class="hint-btn" onclick="showHint('Es un diseño medieval típico.')">Pista</button>
+          </div>
+        </div>
+
+        <div class="quiz">
+          <h2>Quiz: Descubre el mensaje</h2>
+          <p>1. ¿En qué siglo se erigió este puente?</p>
+          <div id="quiz-opciones-1">
+            <button class="action-btn" onclick="checkAnswer('XIII', 'XIV', 1)">XIII</button>
+            <button class="action-btn" onclick="checkAnswer('XIV', 'XIV', 1)">XIV</button>
+            <button class="action-btn" onclick="checkAnswer('XV', 'XIV', 1)">XV</button>
+          </div>
+          <p id="quiz-resultado-1"></p>
+          <button class="hint-btn" onclick="showHint('A principios del siglo XV ya fueron necesarias reparaciones.')">Pista</button>
+
+          <p>2. ¿Sobre qué río está?</p>
+          <div id="quiz-opciones-2">
+            <button class="action-btn" onclick="checkAnswer('Canderuelo', 'Canderuelo', 2)">Canderuelo</button>
+            <button class="action-btn" onclick="checkAnswer('Francia', 'Canderuelo', 2)">Francia</button>
+            <button class="action-btn" onclick="checkAnswer('Tajo', 'Canderuelo', 2)">Tajo</button>
+          </div>
+          <p id="quiz-resultado-2"></p>
+          <button class="hint-btn" onclick="showHint('Cruza el pueblo y es un afluente del Río Francia.')">Pista</button>
+
+          <p>3. ¿Qué resiste el puente?</p>
+          <div id="quiz-opciones-3">
+            <button class="action-btn" onclick="checkAnswer('Crecidas', 'Crecidas', 3)">Crecidas</button>
+            <button class="action-btn" onclick="checkAnswer('Terremotos', 'Crecidas', 3)">Terremotos</button>
+            <button class="action-btn" onclick="checkAnswer('Incendios', 'Crecidas', 3)">Incendios</button>
+          </div>
+          <p id="quiz-resultado-3"></p>
+          <button class="hint-btn" onclick="showHint('No son ni terremotos ni incendios jeje.')">Pista</button>
+        </div>
+
+        <div id="continue-button" style="display: none;">
+          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=puente'">Continuar búsqueda</button>
+        </div>
+
+        <p class="info">
+          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">"escudo"</span><br>
+          <strong>QR en el pueblo:</strong> PUENTE-1523 (en el arco).<br>
+          <strong>Dato Curioso:</strong> Una inscripción apenas visible podría ser una marca de cantero, suerte para encontrarla.
+        </p>
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
+    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
