@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔄 Reiniciar</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔄 ¿Reiniciar el Juego?</h1>
+      <p>Esto borrará tu progreso actual, incluyendo monedas, logros y paradas completadas. ¿Estás seguro?</p>
+    </header>
+
+    <section>
+      <div class="button-group">
+        <button class="action-btn" onclick="resetGame()">Sí, Reiniciar</button>
+        <button class="action-btn" onclick="window.location.href='index.html'">No, Volver</button>
+      </div>
+    </section>
+
+    <audio id="background-music" src="sounds/musica-medieval.mp3" preload="auto" loop autoplay></audio>
+    <div class="music-control">
+      <button>Pausar Música</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function resetGame() {
+      const allStops = ['castillo', 'plaza', 'iglesia', 'fuente', 'ermita', 'puente', 'bodega'];
+      localStorage.clear();
+      localStorage.setItem('monedas', '0');
+      allStops.forEach(stop => localStorage.setItem(`${stop}-completed`, 'false'));
+      alert('Juego reiniciado. ¡Buena suerte en tu nueva aventura!');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
