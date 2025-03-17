@@ -6,7 +6,7 @@ const stops = ['castillo', 'plaza', 'iglesia', 'fuente', 'ermita', 'puente', 'bo
 // Definir las coordenadas de cada parada
 const locations = {
   'castillo': { lat: 40.52063322, lng: -6.06336883 },
-  'plaza': { lat: 40.52128923, lng: -6.06388034 },
+  'plaza': { lat: 40.5204708, lng: -6.06318274 },
   'iglesia': { lat: 40.52139802, lng: -6.06387663 },
   'fuente': { lat: 40.52218483, lng: -6.06456133 },
   'ermita': { lat: 40.52280217, lng: -6.06637778 },
@@ -19,38 +19,38 @@ const toleranceRadius = 10;
 const qrCodes = {
   'castillo': { 
     code: 'CASTILLO-1834', 
-    hint: 'Busca cerca de la torre marcada por el rayo.', 
+    hint: 'El secreto...', 
     curiosity: 'En 1834, un rayo destruyó parte de la torre del castillo, dejando una marca que aún se puede ver.' 
   },
   'plaza': { 
     code: 'PLAZA-1523', 
-    hint: 'El mensaje está escondido cerca de las gradas de piedra.', 
+    hint: '...está escondido...', 
     curiosity: 'La plaza fue escenario de capeas desde el siglo XVII, una tradición que aún se celebra.' 
   },
   'iglesia': { 
     code: 'IGLESIA-1300', 
-    hint: 'Revisa los retablos para encontrar una pista.', 
+    hint: '...en el edificio...', 
     curiosity: 'La iglesia alberga un retablo del siglo XV que fue restaurado en 1998.' 
   },
   'fuente': { 
     code: 'FUENTE-1600', 
-    hint: 'El portalón guarda un secreto bajo los caños.', 
+    hint: '....del siglo XVI...', 
     curiosity: 'La fuente fue construida en el siglo XVI para abastecer de agua al pueblo.' 
   },
   'ermita': { 
     code: 'ERMITA-1500', 
-    hint: 'La Virgen podría señalar el lugar.', 
+    hint: '...con un escudo de armas...', 
     curiosity: 'La Virgen de la ermita es del siglo XVI y fue traída desde Italia.' 
   },
   'puente': { 
     code: 'PUENTE-1400', 
-    hint: 'Busca en el arco principal del puente.', 
+    hint: '... sin escudo.', 
     curiosity: 'El puente resistió una gran crecida del río Canderuelo en 1650.' 
   },
   'bodega': { 
     code: 'BODEGA-1600', 
     hint: 'El dintel del escudo oculta algo más.', 
-    curiosity: 'La bodega guarda vinos de la uva Rufete, típica de la Sierra de Francia.' 
+    curiosity: 'Esta bodega tradicional serrana ha sido cuidadosamente recuperada para ofrecer experiencias con degustaciones de vino de uva Rufete y delicias locales. Al final descubriras el secreto.' 
   }
 };
 
@@ -158,8 +158,8 @@ function checkQR() {
 function unlockContent() {
   const stop = window.location.pathname.split('/').pop().replace('.html', '');
   const messagePieces = {
-    'castillo': 'Oculto', 'plaza': 'en', 'iglesia': 'la', 'fuente': 'bodega',
-    'ermita': 'sin', 'puente': 'escudo', 'bodega': ''
+    'castillo': 'El secreto', 'plaza': 'está escondido', 'iglesia': 'en el edificio', 'fuente': 'con un escudo de armas',
+    'ermita': 'del siglo XVI', 'puente': 'sin escudo', 'bodega': 'El dintel del escudo oculta algo más'
   };
   document.getElementById('location-check').style.display = 'none';
   document.getElementById('game-content').style.display = 'block';
@@ -231,7 +231,7 @@ function setupVisualChallenges() {
     ],
     'ermita': [
       { question: '¿Qué rodea la ermita?', options: ['Parques', 'Montañas', 'Ciudad'], correct: 'Parques' },
-      { question: '¿Qué imagen hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen' }
+      { question: '¿Qué imagen, traìda de Italia, hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen del siglo XVI' }
     ],
     'puente': [
       { question: '¿Qué material predomina?', options: ['Madera', 'Piedra', 'Ladrillo'], correct: 'Piedra' },
