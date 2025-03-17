@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 ¡Felicitaciones!</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+  <style>
+    .festive-container { text-align: center; padding: 20px; background: url('images/pergamino.jpg') repeat; color: #6b3e2e; }
+    .festive-title { font-size: 36px; text-shadow: 2px 2px 4px #d4a017; }
+    .festive-text { font-size: 20px; margin: 20px 0; }
+    .festive-emoji { font-size: 40px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <div class="festive-container">
+    <header>
+      <h1 class="festive-title">🎉 ¡Enhorabuena valiente!</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <p class="festive-text">🏰 Has descifrado una parte del mensaje oculto de Gonzalo con gran destreza. ¡Que las trompetas suenen en tu honor! 🎺</p>
+      <div class="festive-emoji">⚔️ 🏆 🛡️</div>
+      <p class="festive-text" id="completion-text">El pergamino medieval se despliega ante ti. ¿Qué harás ahora, noble y audaz caminante, cual será tu próxima parada?</p>
+
+      <div class="button-group" id="button-group">
+        <!-- Botones dinámicos según la parada -->
+      </div>
+    </section>
+
+    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
+    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      playSound('success-sound');
+      const urlParams = new URLSearchParams(window.location.search);
+      const stop = urlParams.get('stop');
+      const buttonGroup = document.getElementById('button-group');
+      const completionText = document.getElementById('completion-text');
+
+      if (stop === 'bodega') {
+        completionText.textContent = '¡Has completado todas las paradas y revelado el mensaje oculto de Gonzalo! ¿Listo para ver tu logro?';
+        buttonGroup.innerHTML = `
+          <button class="action-btn" onclick="window.location.href='cronica.html'">Ver Crónica Completa</button>
+          <button class="action-btn" id="reset-btn" onclick="resetStop()" data-stop="${stop}">Reiniciar Parada</button>
+          <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        `;
+      } else {
+        buttonGroup.innerHTML = `
+          <button class="action-btn" onclick="window.location.href='explorar.html'">Continuar Búsqueda</button>
+          <button class="action-btn" id="reset-btn" onclick="resetStop()" data-stop="${stop}">Reiniciar Parada</button>
+          <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        `;
+      }
+    });
+
+    function resetStop() {
+      const stop = document.getElementById('reset-btn').getAttribute('data-stop');
+      if (stop) {
+        localStorage.removeItem(`${stop}-completed`);
+        localStorage.removeItem(`message-${stop}`);
+        window.location.href = `${stop}.html`;
+      }
+    }
+  </script>
+</body>
+</html>

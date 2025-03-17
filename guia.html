@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 Guía Histórica</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpg" href="images/escudo-borrado.jpg">
+  <style>
+    .guide-section {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #f5f5dc;
+      padding: 15px;
+      border: 2px solid #4a2c2a;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .guide-section h2 {
+      color: #4a2c2a;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .guide-section p {
+      color: #333;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .guide-section img {
+      max-width: 40%;
+      height: auto;
+      display: block;
+      margin: 10px auto;
+      border-radius: 5px;
+      border: 1px solid #8b4513;
+    }
+    .button-group {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📚 Guía Histórica de San Martín del Castañar</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <div class="guide-section">
+        <h2>🏰 Castillo de San Martín del Castañar</h2>
+        <img src="images/castillo-entrada.jpg" alt="Castillo de San Martín">
+        <p>Construido en el siglo XV sobre fortificaciones anteriores, este castillo dominaba el valle del río Francia. En el siglo XIX, se convirtió en cementerio municipal. Actualmente alberga el Centro de Interpretación de la Reserva de la Biosfera. <a href="https://xn--sanmartindelcastaar-c4b.es/castillo-de-la-biosfera/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> Excavaciones han encontrado cerámica medieval, evidenciando su importancia defensiva.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>🏟️ Plaza de Toros</h2>
+        <img src="images/interior.jpg" alt="Plaza de Toros">
+        <p>Una de las plazas de toros más antiguas de España, transformada en el siglo XVII a partir del patio de armas del castillo. Su forma ovalada permite la celebración de capeas, una tradición centenaria. <a href="https://xn--sanmartindelcastaar-c4b.es/plaza-de-toros/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> Las capeas siguen realizándose en agosto, manteniendo una tradición de más de 300 años.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>⛪ Iglesia de San Martín</h2>
+        <img src="images/iglesia.jpg" alt="Iglesia de San Martín">
+        <p>Construida en el siglo XIII en estilo gótico-mudéjar, con reformas renacentistas y barrocas. Su pórtico renacentista y sus retablos barrocos la hacen única. <a href="https://www.turismocastillayleon.com/es/patrimonio-cultura/iglesias-ermitas/iglesia-parroquial-san-martin-san-martin-castanar" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> En el siglo XX se descubrieron pinturas murales ocultas tras el yeso.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>⛲ Fuente de los Dos Caños y Portalón</h2>
+        <img src="images/portalon.jpeg" alt="Portalón">
+        <p>Construida en el siglo XVI, esta fuente renacentista abasteció a los vecinos durante siglos. El Portalón, anexo a la plaza, era usado para presenciar eventos públicos. <a href="https://xn--sanmartindelcastaar-c4b.es/plaza-mayor-y-portalon/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> Durante las fiestas, los jóvenes siguen la tradición de ser "bautizados" en la fuente.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>🙏 Ermita del Socorro</h2>
+        <img src="images/ermita-exterior.jpg" alt="Ermita del Socorro">
+        <p>Fundada en el siglo XV en honor a San Sebastián, alberga la imagen de la Virgen del Socorro. Ha sido un lugar de peregrinación durante siglos. <a href="http://www.sanmartindelcastanar.es/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> En épocas de sequía, los vecinos organizaban procesiones para pedir lluvia.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>🌉 Puente Medieval y Calzada Romana</h2>
+        <img src="images/puente-medieval.jpg" alt="Puente Medieval">
+        <p>Este puente del siglo XIV cruza el río Francia y ha sido esencial en el comercio de la región. Se cree que la calzada romana que pasa por él era parte de una ruta secundaria. <a href="https://xn--sanmartindelcastaar-c4b.es/puente-y-calzada-romana/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> Las marcas en la piedra podrían ser inscripciones de antiguos canteros.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>🍷 Bodega Medieval</h2>
+        <img src="images/bodega-medieval.jpg" alt="Bodega Medieval">
+        <p>Una bodega del siglo XVI que mantiene viva la tradición vinícola de la Sierra de Francia. Hoy en día ofrece experiencias enológicas con vinos de la uva Rufete. <a href="https://www.labodegamedieval.es/reservar/" target="_blank">Más información</a></p>
+        <p><strong>Curiosidad:</strong> Se dice que los vinos de la Sierra se sirvieron en la boda de los Reyes Católicos.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>🌄 Cultura y Tradiciones</h2>
+        <p>San Martín del Castañar conserva tradiciones como la festividad de San Martín de Tours en noviembre, con procesiones y eventos culturales. También destaca la matanza tradicional, que sigue realizándose en los meses de invierno.</p>
+        <p><strong>Curiosidad:</strong> Durante la matanza, se preparan embutidos siguiendo recetas centenarias.</p>
+      </div>
+
+      <div class="button-group">
+        <button class="action-btn" onclick="window.location.href='index.html'">Regresar a Inicio</button>
+        <button class="action-btn" onclick="window.location.href='explorar.html'">Volver a Explorar</button>
+      </div>
+    </section>
+
+    <audio id="background-music" src="sounds/musica-medieval.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

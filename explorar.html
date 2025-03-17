@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺️ Explorar</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+  <style>
+    .map-container { position: relative; width: 100%; max-width: 800px; margin: 20px auto; }
+    .map-container img { width: 100%; height: auto; display: block; }
+    .buttons-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: space-around; }
+    .map-btn { background: #6b3e2e; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    .map-btn.completed { text-decoration: line-through; }
+    .map-btn:hover { background: #8b4513; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🗺️ Explora el Mensaje Oculto de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <div class="map-container">
+        <img src="images/plaza-vista.jpg" alt="Mapa de San Martín del Castañar" usemap="#san-martin-map">
+        <map name="san-martin-map"></map>
+        <div class="buttons-container">
+          <button class="map-btn" id="btn-castillo" onclick="showInfo('castillo')">🏰 Castillo</button>
+          <button class="map-btn" id="btn-plaza" onclick="showInfo('plaza')">🏟️ Plaza de toros</button>
+          <button class="map-btn" id="btn-iglesia" onclick="showInfo('iglesia')">⛪ Iglesia</button>
+          <button class="map-btn" id="btn-fuente" onclick="showInfo('fuente')">⛲ Fuente y Portalón</button>
+          <button class="map-btn" id="btn-ermita" onclick="showInfo('ermita')">🙏 Ermita</button>
+          <button class="map-btn" id="btn-puente" onclick="showInfo('puente')">🌉 Puente</button>
+          <button class="map-btn" id="btn-bodega" onclick="showInfo('bodega')">🍷 Bodega</button>
+        </div>
+      </div>
+
+      <div id="cultural-info" class="cultural-info">
+        <h2>Información</h2>
+        <p>Haz clic en un botón para explorar cada parada y descubrir el mensaje oculto de Gonzalo.</p>
+      </div>
+
+      <div class="button-group">
+        <button class="action-btn" onclick="window.location.href='index.html'">Inicio</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía Histórica</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+      </div>
+    </section>
+
+    <audio id="background-music" src="sounds/musica-medieval.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    function showInfo(stop) {
+      const info = document.getElementById('cultural-info');
+      const messages = {
+        'castillo': 'El Castillo: Defensa del siglo XIII con vistas a las sierras y dominando el valle.',
+        'plaza': 'La Plaza: Plaza de toros del siglo XVII, llena de tradición y festejos.',
+        'iglesia': 'La Iglesia: Gótico-mudéjar con retablos barrocos, una joya del sur de Salamanca.',
+        'fuente': 'Fuente y Portalón: Renacentistas del siglo XVI, dos caños históricos y un lugar de encuentro y comercio.',
+        'ermita': 'La Ermita: Siglo XV, en honor a San Sebastián y la virgen del Socorro.',
+        'puente': 'El Puente: Medieval del siglo XIV sobre el río Canderuelo.',
+        'bodega': 'La Bodega: Siglo XVI, un secreto olvidado que el vino ha de guardar.'
+      };
+      info.innerHTML = `<h2>${stop === 'fuente' ? 'Fuente y Portalón' : stop.charAt(0).toUpperCase() + stop.slice(1)}</h2><p>${messages[stop]}</p><button class="action-btn" onclick="window.location.href='${stop}.html'">Visitar</button>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const buttons = document.querySelectorAll('.map-btn');
+      buttons.forEach(btn => {
+        const stop = btn.id.replace('btn-', '');
+        if (localStorage.getItem(`${stop}-completed`) === 'true') {
+          btn.classList.add('completed');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

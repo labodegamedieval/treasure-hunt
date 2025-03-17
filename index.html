@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏰 Aventura de Gonzalo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏰 Aventura de Gonzalo</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <div class="carousel">
+        <div class="slide active" data-slide="0">
+          <img src="images/portada.jpg" alt="San Martín del Castañar">
+          <p class="carousel-info">
+            San Martín del Castañar, un pueblo con mucha historia y una Bodega Medieval que esconde un secreto tras escudo de armas borrado.... 
+          </p>
+        </div>
+        <div class="slide" data-slide="1">
+          <img src="images/gonzalo.jpg" alt="Gonzalo de la Sierra">
+          <p class="carousel-info">
+            Gonzalo de la Sierra, bodeguero del siglo XVI, te invita a descubrir San Martin de manera diferente, una búsqueda con un final inesperado. Ha dejado un mensaje que tendrás que descifrar!
+          </p>
+        </div>
+        <div class="slide" data-slide="2">
+          <img src="images/vista-castillo.jpg" alt="Vista del Castillo">
+          <p class="carousel-info">
+            Empieza por el castillo y desbloquea cada parada para descubrir su mensaje.
+          </p>
+        </div>
+        <button class="carousel-btn prev-slide">←</button>
+        <button class="carousel-btn next-slide">→</button>
+      </div>
+
+      <h2>San Martín del Castañar</h2>
+      <p>Juega gratis y sigue los pasos de Gonzalo de la Sierra, un bodeguero del siglo XVI que dejó un mensaje escondido en este pueblo medieval. Un secreto centenario que no deja a nadie indiferente.</p>
+
+      <h2>Instrucciones</h2>
+      <ol>
+        <li>Activa el GPS y explora las 7 paradas en el mapa.</li>
+        <li>Resuelve retos y recopila los fragmentos del mensaje.</li>
+        <li>Completa la aventura y después de reservar una experiencia en la Bodega Medieval, podrás reclamar tu recompensa.</li>
+      </ol>
+
+      <div class="button-group">
+        <button class="action-btn" onclick="window.location.href='explorar.html'">Explorar</button>
+        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
+        <button class="action-btn" onclick="window.location.href='guia.html'">Guía Histórica</button>
+      </div>
+    </section>
+
+    <audio id="background-music" src="sounds/musica-medieval.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
