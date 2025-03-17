@@ -9,9 +9,9 @@ const locations = {
   'plaza': { lat: 40.52128923, lng: -6.06388034 },
   'iglesia': { lat: 40.52139802, lng: -6.06387663 },
   'fuente': { lat: 40.52218483, lng: -6.06456133 },
-  'ermita': { lat: 40.522793, lng: -6.066424 },
-  'puente': { lat: 40.522552, lng: -6.065858 },
-  'bodega': { lat: 40.521659, lng: -6.064401 }
+  'ermita': { lat: 40.52280217, lng: -6.06637778 },
+  'puente': { lat: 40.52254591, lng: -6.06589002 },
+  'bodega': { lat: 40.52165436, lng: -6.06443965 }
 };
 
 const toleranceRadius = 20;
