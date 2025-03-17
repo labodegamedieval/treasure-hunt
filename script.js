@@ -5,10 +5,10 @@ const stops = ['castillo', 'plaza', 'iglesia', 'fuente', 'ermita', 'puente', 'bo
 
 // Definir las coordenadas de cada parada
 const locations = {
-  'castillo': { lat: 40.520512, lng: -6.063541 },
-  'plaza': { lat: 40.520621, lng: -6.063455 },
-  'iglesia': { lat: 40.521379, lng: -6.063810 },
-  'fuente': { lat: 40.522185, lng: -6.064564 },
+  'castillo': { lat: 40.52063322, lng: -6.06336883 },
+  'plaza': { lat: 40.52128923, lng: -6.06388034 },
+  'iglesia': { lat: 40.52139802, lng: -6.06387663 },
+  'fuente': { lat: 40.52218483, lng: -6.06456133 },
   'ermita': { lat: 40.522793, lng: -6.066424 },
   'puente': { lat: 40.522552, lng: -6.065858 },
   'bodega': { lat: 40.521659, lng: -6.064401 }
