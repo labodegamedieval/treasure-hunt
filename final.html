@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏆 Final</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏆 ¡Felicidades, Explorador!</h1>
+      <div class="music-control">
+        <button class="music-btn" onclick="toggleMusic()">
+          <span class="music-icon">🎵</span> Pausar Música
+        </button>
+      </div>
+    </header>
+
+    <section>
+      <p>Tras recorrer San Martín del Castañar, has llegado a la Bodega Medieval del siglo XVI. Aquí, Gonzalo dejó su secreto en 1523 y podrás descubrirlo si reservas una visita.</p>
+      <img src="images/bodega-secreto.jpg" alt="El Secreto de Gonzalo" style="max-width: 100%; border: 2px solid #8b4513; border-radius: 10px;">
+      <p>Tu aventura ha desvelado la historia de un pueblo que, desde el siglo XIII hasta el XVI, forjó su identidad entre castillos, puentes y vides. ¡Gracias por unirte a este viaje en el tiempo!</p>
+
+      <div class="button-group">
+        <button class="action-btn" onclick="window.location.href='index.html'">Volver al Inicio</button>
+        <button class="action-btn" onclick="resetGame()">Reiniciar Aventura</button>
+      </div>
+    </section>
+
+    <audio id="background-music" src="sounds/musica-medieval.mp3" preload="auto" loop></audio>
+  </div>
+
+  <footer>
+    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
