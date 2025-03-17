@@ -14,7 +14,7 @@ const locations = {
   'bodega': { lat: 40.52165436, lng: -6.06443965 }
 };
 
-const toleranceRadius = 20;
+const toleranceRadius = 10;
 
 const qrCodes = {
   'castillo': { 
