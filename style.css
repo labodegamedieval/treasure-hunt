@@ -263,25 +263,7 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
-/* Contenedor del radar */
-#sonar-radar {
-  display: block;
-  margin: 20px auto;
-  border-radius: 50%;
-  background: #000; /* Fondo negro como sonar de submarino */
-  border: 2px solid #00ff00; /* Borde verde */
-}
 
-/* Efecto pulsante para el punto verde */
-@keyframes sonarPulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.3; }
-  100% { opacity: 1; }
-}
-
-.sonar-active {
-  animation: sonarPulse 1s infinite;
-}
 .compass-container {
     text-align: center;
     margin-top: 20px;
