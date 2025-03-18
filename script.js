@@ -114,23 +114,21 @@ function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDis
     ctx.stroke();
   }
 
-  // Calcula la posición relativa del objetivo (punto verde parpadeante)
+  // Calcula la posición relativa del objetivo
   const latDiff = (targetLat - userLat) * 111320; // Metros por grado de latitud
   const lngDiff = (targetLng - userLng) * 111320 * Math.cos(userLat * Math.PI / 180); // Ajuste por longitud
   const scale = maxRadius / maxDistance; // Escala metros a píxeles
   const targetX = centerX + lngDiff * scale;
   const targetY = centerY - latDiff * scale;
 
-  // Dibuja el punto verde parpadeante (objetivo)
-  ctx.beginPath();
-  ctx.arc(targetX, targetY, 5, 0, 2 * Math.PI);
-  ctx.fillStyle = 'lime';
-  ctx.fill();
-  canvas.classList.add('sonar-active'); // Activa el parpadeo
-
-  // Línea de escaneo tipo sonar de submarino
+  // Línea de escaneo tipo sonar con gradiente suave
   const now = Date.now() / 1000;
-  const angle = (now * 2) % (2 * Math.PI); // Rotación rápida
+  const angle = (now * 1.5) % (2 * Math.PI); // Velocidad ajustada para un barrido suave
+  const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+  gradient.addColorStop(0, 'rgba(0, 255, 0, 0)'); // Centro transparente
+  gradient.addColorStop(0.7, 'rgba(0, 255, 0, 0.5)'); // Intensidad media
+  gradient.addColorStop(1, 'rgba(0, 255, 0, 0)'); // Borde transparente
+
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
@@ -138,18 +136,23 @@ function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDis
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Efecto de desvanecimiento en la cola
-  for (let i = 1; i <= 10; i++) {
-    const fadeAngle = (angle - (i * 0.1)) % (2 * Math.PI);
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(centerX + maxRadius * Math.cos(fadeAngle), centerY + maxRadius * Math.sin(fadeAngle));
-    ctx.strokeStyle = `rgba(0, 255, 0, ${0.8 - i * 0.08})`;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
+  // Sector de barrido con gradiente
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.arc(centerX, centerY, maxRadius, angle - 0.2, angle, false); // Sector pequeño detrás de la línea
+  ctx.closePath();
+  ctx.fillStyle = gradient;
+  ctx.fill();
 
-  // Indicador de distancia
+  // Punto verde parpadeante sincronizado con la línea
+  const pulse = Math.sin(now * 3); // Frecuencia de parpadeo
+  const opacity = 0.3 + (pulse > 0 ? pulse : -pulse) * 0.7; // Entre 0.3 y 1
+  ctx.beginPath();
+  ctx.arc(targetX, targetY, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = `rgba(0, 255, 0, ${opacity})`;
+  ctx.fill();
+
+  // Indicador de usuario (centro) cuando estás cerca
   if (distance <= toleranceRadius) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
