@@ -40,6 +40,56 @@
         <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
         <p id="location-status"></p>
         <canvas id="sonar-radar" width="200" height="200"></canvas>
+
+<script>
+const canvas = document.getElementById("sonar-radar");
+const ctx = canvas.getContext("2d");
+
+let angle = 0; // Ángulo inicial del radar
+let lastTime = 0;
+
+// Función para animar el radar
+function animateRadar(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const deltaTime = timestamp - lastTime;
+
+    if (deltaTime > 16) { // Aproximadamente 60 FPS
+        lastTime = timestamp;
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar canvas
+
+        // Dibujar el fondo del radar
+        ctx.fillStyle = "#0a0a0a";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Dibujar círculos concéntricos
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
+        ctx.lineWidth = 2;
+        for (let i = 1; i <= 3; i++) {
+            ctx.beginPath();
+            ctx.arc(100, 100, i * 30, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        // Dibujar el rayo del radar
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.lineTo(100 + 100 * Math.cos(angle), 100 + 100 * Math.sin(angle));
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.7)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Suavizar la animación incrementando el ángulo poco a poco
+        angle += 0.05; 
+        if (angle > Math.PI * 2) angle = 0;
+    }
+
+    requestAnimationFrame(animateRadar);
+}
+
+// Iniciar animación
+requestAnimationFrame(animateRadar);
+</script>
+
       </div>
 
       <div id="game-content" style="display: none;">
