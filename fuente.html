@@ -50,14 +50,14 @@ const audioPing = document.getElementById("sonar-ping");
 let angle = 0; // Ángulo del radar
 let lastTime = 0;
 
-// Simulación de paradas en coordenadas relativas al radar
+// Simulación de paradas con coordenadas relativas al radar
 const stops = [
-    { x: 50, y: 20 },   // Parada 1
-    { x: -40, y: 60 },  // Parada 2
-    { x: 30, y: -50 }   // Parada 3
+    { x: 50, y: 20, detected: false },  
+    { x: -40, y: 60, detected: false },  
+    { x: 30, y: -50, detected: false }  
 ];
 
-// Función para dibujar el radar con animaciones suaves
+// Función para dibujar el radar con estela más larga y detección GPS
 function animateRadar(timestamp) {
     if (!lastTime) lastTime = timestamp;
     const deltaTime = timestamp - lastTime;
@@ -65,8 +65,8 @@ function animateRadar(timestamp) {
     if (deltaTime > 16) { // Control de FPS (~60 FPS)
         lastTime = timestamp;
 
-        // Efecto de estela semitransparente
-        ctx.fillStyle = "rgba(10, 10, 10, 0.3)";
+        // Efecto de estela más larga (¼ de la circunferencia)
+        ctx.fillStyle = "rgba(10, 10, 10, 0.2)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Dibujar círculos concéntricos
@@ -78,30 +78,35 @@ function animateRadar(timestamp) {
             ctx.stroke();
         }
 
-        // Dibujar el rayo del radar con transición suave
-        const xEnd = 100 + 100 * Math.cos(angle);
-        const yEnd = 100 + 100 * Math.sin(angle);
-        ctx.beginPath();
-        ctx.moveTo(100, 100);
-        ctx.lineTo(xEnd, yEnd);
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.9)";
-        ctx.lineWidth = 3;
-        ctx.stroke();
+        // Dibujar el rayo del radar con estela más larga
+        for (let i = 0; i < Math.PI / 2; i += 0.05) {
+            let trailAngle = angle - i;
+            let xTrail = 100 + 100 * Math.cos(trailAngle);
+            let yTrail = 100 + 100 * Math.sin(trailAngle);
+            ctx.beginPath();
+            ctx.moveTo(100, 100);
+            ctx.lineTo(xTrail, yTrail);
+            ctx.strokeStyle = `rgba(0, 255, 0, ${1 - i / (Math.PI / 2)})`; // Desvanecimiento
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
 
-        // Dibujar las paradas como puntos
+        // Dibujar las paradas como puntos verdes
         stops.forEach(stop => {
             ctx.beginPath();
             ctx.arc(100 + stop.x, 100 + stop.y, 5, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(255, 0, 0, 1)";
+            ctx.fillStyle = "rgba(0, 255, 0, 1)";
             ctx.fill();
 
-            // Detectar si el radar pasa cerca de una parada
-            const dx = xEnd - (100 + stop.x);
-            const dy = yEnd - (100 + stop.y);
+            // Detección de colisión con el rayo
+            const dx = (100 + stop.x) - (100 + 100 * Math.cos(angle));
+            const dy = (100 + stop.y) - (100 + 100 * Math.sin(angle));
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 10) {
-                audioPing.play(); // Sonido de "ping"
+            if (distance < 10 && !stop.detected) {
+                stop.detected = true; // Evitar que suene varias veces
+                audioPing.play();
+                checkGPSUnlock(stop);
             }
         });
 
@@ -113,7 +118,52 @@ function animateRadar(timestamp) {
     requestAnimationFrame(animateRadar);
 }
 
-// Iniciar animación
+// Función para verificar si se desbloquea la parada por GPS
+function checkGPSUnlock(stop) {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const userLat = position.coords.latitude;
+                const userLon = position.coords.longitude;
+                console.log(`GPS detectado: ${userLat}, ${userLon}`);
+
+                // Coordenadas de prueba (¡ajusta con coordenadas reales!)
+                const stopLat = 40.0000; // Modificar con latitud real
+                const stopLon = -5.5000; // Modificar con longitud real
+
+                const distance = getDistance(userLat, userLon, stopLat, stopLon);
+                console.log(`Distancia a parada: ${distance} metros`);
+
+                if (distance < 20) {
+                    document.getElementById("location-status").innerText = "Ubicación verificada ✅";
+                } else {
+                    document.getElementById("location-status").innerText = "Ubicación incorrecta ❌";
+                }
+            },
+            function(error) {
+                console.error("Error al obtener GPS:", error);
+                document.getElementById("location-status").innerText = "No se pudo obtener la ubicación ❌";
+            }
+        );
+    } else {
+        console.log("Geolocalización no soportada");
+    }
+}
+
+// Función para calcular la distancia en metros entre dos puntos GPS
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Radio de la Tierra en metros
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Iniciar la animación
 requestAnimationFrame(animateRadar);
 </script>
 
