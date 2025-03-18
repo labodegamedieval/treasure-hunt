@@ -40,25 +40,33 @@
         <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
         <p id="location-status"></p>
         <canvas id="sonar-radar" width="200" height="200"></canvas>
+<audio id="sonar-ping" src="sounds/sonar-ping.mp3" preload="auto"></audio>
 
 <script>
 const canvas = document.getElementById("sonar-radar");
 const ctx = canvas.getContext("2d");
+const audioPing = document.getElementById("sonar-ping");
 
-let angle = 0; // Ángulo inicial del radar
+let angle = 0; // Ángulo del radar
 let lastTime = 0;
 
-// Función para animar el radar
+// Simulación de paradas en coordenadas relativas al radar
+const stops = [
+    { x: 50, y: 20 },   // Parada 1
+    { x: -40, y: 60 },  // Parada 2
+    { x: 30, y: -50 }   // Parada 3
+];
+
+// Función para dibujar el radar con animaciones suaves
 function animateRadar(timestamp) {
     if (!lastTime) lastTime = timestamp;
     const deltaTime = timestamp - lastTime;
 
-    if (deltaTime > 16) { // Aproximadamente 60 FPS
+    if (deltaTime > 16) { // Control de FPS (~60 FPS)
         lastTime = timestamp;
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar canvas
 
-        // Dibujar el fondo del radar
-        ctx.fillStyle = "#0a0a0a";
+        // Efecto de estela semitransparente
+        ctx.fillStyle = "rgba(10, 10, 10, 0.3)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         // Dibujar círculos concéntricos
@@ -70,16 +78,35 @@ function animateRadar(timestamp) {
             ctx.stroke();
         }
 
-        // Dibujar el rayo del radar
+        // Dibujar el rayo del radar con transición suave
+        const xEnd = 100 + 100 * Math.cos(angle);
+        const yEnd = 100 + 100 * Math.sin(angle);
         ctx.beginPath();
         ctx.moveTo(100, 100);
-        ctx.lineTo(100 + 100 * Math.cos(angle), 100 + 100 * Math.sin(angle));
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.7)";
+        ctx.lineTo(xEnd, yEnd);
+        ctx.strokeStyle = "rgba(0, 255, 0, 0.9)";
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // Suavizar la animación incrementando el ángulo poco a poco
-        angle += 0.05; 
+        // Dibujar las paradas como puntos
+        stops.forEach(stop => {
+            ctx.beginPath();
+            ctx.arc(100 + stop.x, 100 + stop.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 0, 0, 1)";
+            ctx.fill();
+
+            // Detectar si el radar pasa cerca de una parada
+            const dx = xEnd - (100 + stop.x);
+            const dy = yEnd - (100 + stop.y);
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < 10) {
+                audioPing.play(); // Sonido de "ping"
+            }
+        });
+
+        // Movimiento progresivo del radar
+        angle += 0.05;
         if (angle > Math.PI * 2) angle = 0;
     }
 
