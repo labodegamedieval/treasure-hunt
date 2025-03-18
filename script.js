@@ -91,6 +91,7 @@ function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
 }
 
 let watchId = null;
+let lastPingTime = 0; // Para controlar el "ping"
 
 function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDistance) {
   const canvas = document.getElementById('sonar-radar');
@@ -158,6 +159,13 @@ function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDis
     ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
     ctx.fillStyle = 'lime';
     ctx.fill();
+  }
+
+  // Reproducir el "ping" al completar un ciclo
+  const cycleTime = (2 * Math.PI) / 1.5; // Tiempo por ciclo (segundos)
+  if (now - lastPingTime >= cycleTime) {
+    playSound('sonar-ping');
+    lastPingTime = now;
   }
 }
 
