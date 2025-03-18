@@ -266,23 +266,25 @@ footer a:hover {
 
 .compass-container {
     text-align: center;
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
+}
+
+.compass-wrapper {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    max-width: 250px;
     margin: auto;
 }
 
 #compass-background {
     width: 100%;
     height: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 #compass-arrow {
-    width: 50px;
-    height: 50px;
+    width: 40%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -293,8 +295,6 @@ footer a:hover {
 
 #distance-info {
     font-size: 18px;
-    margin-top: 170px;
-    text-align: center;
+    margin-top: 15px;
     font-weight: bold;
 }
-
