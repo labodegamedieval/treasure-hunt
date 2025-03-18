@@ -90,10 +90,9 @@ function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// Variable para almacenar el ID del watchPosition
 let watchId = null;
 
-function drawSonarRadar(distance, maxDistance) {
+function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDistance) {
   const canvas = document.getElementById('sonar-radar');
   if (!canvas) return;
 
@@ -105,14 +104,7 @@ function drawSonarRadar(distance, maxDistance) {
   // Limpia el canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Dibuja el círculo de fondo (rango máximo)
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, maxRadius, 0, 2 * Math.PI);
-  ctx.strokeStyle = 'rgba(0, 255, 0, 0.3)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Dibuja círculos concéntricos como fondo del sonar
+  // Dibuja círculos concéntricos como fondo
   for (let r = maxRadius / 3; r <= maxRadius; r += maxRadius / 3) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
@@ -121,15 +113,26 @@ function drawSonarRadar(distance, maxDistance) {
     ctx.stroke();
   }
 
-  // Calcula el radio del círculo según la distancia
+  // Calcula la posición relativa del objetivo (punto rojo)
+  const latDiff = (targetLat - userLat) * 111320; // Aproximadamente 111,320 metros por grado de latitud
+  const lngDiff = (targetLng - userLng) * 111320 * Math.cos(userLat * Math.PI / 180); // Ajuste por longitud
+  const scale = maxRadius / maxDistance; // Escala para mapear metros a píxeles
+  const targetX = centerX + lngDiff * scale;
+  const targetY = centerY - latDiff * scale;
+
+  // Dibuja el punto rojo (objetivo)
+  ctx.beginPath();
+  ctx.arc(targetX, targetY, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = 'red';
+  ctx.fill();
+
+  // Dibuja el círculo del usuario
   const radius = Math.max(5, maxRadius * (distance / maxDistance));
   if (distance <= toleranceRadius) {
     canvas.classList.add('sonar-active');
   } else {
     canvas.classList.remove('sonar-active');
   }
-
-  // Dibuja el círculo principal del sonar
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
   ctx.fillStyle = distance <= toleranceRadius ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
@@ -138,26 +141,30 @@ function drawSonarRadar(distance, maxDistance) {
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // Líneas de escaneo giratorias
-  const now = Date.now() / 1000; // Tiempo en segundos para animación
-  const angle = (now % (2 * Math.PI)); // Rotación continua
+  // Línea de escaneo tipo sonar de submarino
+  const now = Date.now() / 1000;
+  const angle = (now * 2) % (2 * Math.PI); // Rotación más rápida
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
-  ctx.strokeStyle = 'rgba(0, 255, 0, 0.7)';
+  ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Segunda línea opuesta para efecto simétrico
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY);
-  ctx.lineTo(centerX + maxRadius * Math.cos(angle + Math.PI), centerY + maxRadius * Math.sin(angle + Math.PI));
-  ctx.stroke();
+  // Efecto de desvanecimiento en la cola
+  for (let i = 1; i <= 10; i++) {
+    const fadeAngle = (angle - (i * 0.1)) % (2 * Math.PI);
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(centerX + maxRadius * Math.cos(fadeAngle), centerY + maxRadius * Math.sin(fadeAngle));
+    ctx.strokeStyle = `rgba(0, 255, 0, ${0.8 - i * 0.08})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
 }
 
 function checkLocation() {
   if (navigator.geolocation) {
-    // Limpia cualquier watchPosition previo
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
     }
@@ -172,11 +179,11 @@ function checkLocation() {
 
         if (targetLocation) {
           const distance = getDistanceFromLatLonInMeters(userLat, userLng, targetLocation.lat, targetLocation.lng);
-          drawSonarRadar(distance, 100); // 100 metros como distancia máxima visible
+          drawSonarRadar(userLat, userLng, targetLocation.lat, targetLocation.lng, distance, 100);
           if (distance <= toleranceRadius) {
             alert('¡Ubicación verificada!');
             unlockContent();
-            navigator.geolocation.clearWatch(watchId); // Detiene el rastreo
+            navigator.geolocation.clearWatch(watchId);
           } else {
             document.getElementById('location-status').textContent = `Estás a ${Math.round(distance)} metros. Acércate más (máximo ${toleranceRadius} metros). Precisión: ${Math.round(accuracy)}m`;
             playSound('error-sound');
@@ -192,14 +199,13 @@ function checkLocation() {
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
 
-    // Animación continua del sonar
     function animateSonar() {
       const stop = window.location.pathname.split('/').pop().replace('.html', '');
       const targetLocation = locations[stop];
       if (targetLocation && document.getElementById('location-check').style.display !== 'none') {
         navigator.geolocation.getCurrentPosition(pos => {
           const distance = getDistanceFromLatLonInMeters(pos.coords.latitude, pos.coords.longitude, targetLocation.lat, targetLocation.lng);
-          drawSonarRadar(distance, 100);
+          drawSonarRadar(pos.coords.latitude, pos.coords.longitude, targetLocation.lat, targetLocation.lng, distance, 100);
         });
         requestAnimationFrame(animateSonar);
       }
