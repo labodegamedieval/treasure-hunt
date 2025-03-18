@@ -40,6 +40,49 @@ header h1 {
   text-align: center;
 }
 
+/* Brújula */
+.compass-container {
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    margin: auto;
+}
+
+.compass-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: auto;
+}
+
+#compass-background {
+    width: 100%;
+    height: auto;
+}
+
+#compass-arrow {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s linear;
+}
+
+/* Ajustes móviles */
+@media (max-width: 768px) {
+  .compass-container {
+    max-width: 280px;
+  }
+  .compass-wrapper {
+    max-width: 260px;
+  }
+  #compass-arrow {
+    width: 45%;
+  }
+}
+
 /* Carrusel */
 .carousel {
   position: relative;
@@ -95,200 +138,16 @@ header h1 {
   box-sizing: border-box;
 }
 
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #8b4513;
-  color: #f5e8c7;
-  border: 2px solid #d4a017;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  border-radius: 50%;
-  transition: background-color 0.3s, transform 0.2s;
-  z-index: 10;
-}
-
-.carousel-btn:hover {
-  background-color: #a0522d;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.prev-slide {
-  left: 10px;
-}
-
-.next-slide {
-  right: 10px;
-}
-
-/* Estilo para el QR status */
-#qr-status {
-  margin-top: 10px;
-  padding: 10px;
-  background: rgba(245, 232, 199, 0.95);
-  border-radius: 5px;
-  border-left: 4px solid #d4a017;
-  font-size: 16px;
-  font-weight: bold;
-  color: #2a1e1e;
-  text-align: left;
-}
-
-#location-check {
-  text-align: center;
-  width: 100%;
-}
-
-/* Dispositivos móviles */
+/* Ajustes móviles */
 @media (max-width: 768px) {
   .carousel {
     max-width: 100%;
     margin-left: 0;
   }
-
   .slide img {
     max-height: 200px;
   }
-
   .carousel-info {
     font-size: 16px;
-    font-weight: bold;
   }
-
-  .carousel-btn {
-    padding: 8px;
-    font-size: 16px;
-  }
-
-  header h1 {
-    font-size: 2rem;
-  }
-
-  .container {
-    padding: 10px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  body {
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  #qr-status {
-    font-size: 14px;
-  }
-}
-
-/* Botones */
-.action-btn {
-  background-color: #8b4513;
-  color: #f5e8c7;
-  padding: 10px 20px;
-  border: 2px solid #d4a017;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-  font-family: 'Cinzel', serif;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.action-btn:hover {
-  background-color: #a0522d;
-  transform: scale(1.05);
-}
-
-.hint-btn {
-  background-color: #4a4a4a;
-  color: #f5e8c7;
-  padding: 5px 10px;
-  border: 2px solid #d4a017;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: 'Cinzel', serif;
-  font-size: 14px;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.hint-btn:hover {
-  background-color: #5a5a5a;
-}
-
-/* Otros elementos */
-.hidden-detail {
-  color: #d4a017;
-  cursor: pointer;
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-.stop-selector {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.stop-icon {
-  font-size: 50px;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #d4a017;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-footer {
-  text-align: center;
-  padding: 10px;
-  background-color: #3c2f2f;
-  color: #f5e8c7;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  border-top: 3px solid #d4a017;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-footer a {
-  color: #d4a017;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-.compass-container {
-    text-align: center;
-    width: 100%;
-    max-width: 350px;
-    margin: auto;
-}
-
-.compass-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 320px;
-    margin: auto;
-}
-
-#compass-background {
-    width: 100%;
-    height: auto;
-}
-
-#compass-arrow {
-    width: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center;
-    transform: translate(-50%, -50%);
-    transition: transform 0.2s linear;
 }
