@@ -44,14 +44,14 @@ header h1 {
 .compass-container {
     text-align: center;
     width: 100%;
-    max-width: 350px;
+    max-width: 400px;
     margin: auto;
 }
 
 .compass-wrapper {
     position: relative;
     width: 100%;
-    max-width: 320px;
+    max-width: 380px;
     margin: auto;
 }
 
@@ -61,25 +61,25 @@ header h1 {
 }
 
 #compass-arrow {
-    width: 50%;
+    width: 70%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform-origin: center;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(0deg);
     transition: transform 0.2s linear;
 }
 
 /* Ajustes móviles */
 @media (max-width: 768px) {
   .compass-container {
-    max-width: 280px;
+    max-width: 320px;
   }
   .compass-wrapper {
-    max-width: 260px;
+    max-width: 300px;
   }
   #compass-arrow {
-    width: 45%;
+    width: 65%;
   }
 }
 
