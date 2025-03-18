@@ -39,6 +39,7 @@
         <input type="text" id="location-input" placeholder="Ej: Castillo">
         <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
         <p id="location-status"></p>
+        <canvas id="sonar-radar" width="200" height="200"></canvas>
       </div>
 
       <div id="game-content" style="display: none;">
@@ -47,7 +48,7 @@
             <div class="slide active" data-slide="0">
               <img src="images/castillo-entrada.jpg" alt="Entrada del Castillo">
               <p class="carousel-info">
-                <strong>Entrada Fortificada:</strong> Construida en el siglo XIII como defensa en la Reconquista. En el siglo XV el castillo fue remodelado en palacio por el Conde de Miranda. También sirvio como carcel en el siglo XVIII. <span class="hidden-detail" onclick="revealHint('Explora el castillo a su alrededor y entra hasta la parte mas alta, desde alli se ven algunos paredones.')">¡Busca aquí!</span>
+                <strong>Entrada Fortificada:</strong> Construida en el siglo XIII como defensa en la Reconquista. En el siglo XV el castillo fue remodelado en palacio por el Conde de Miranda. También sirvió como cárcel en el siglo XVIII. <span class="hidden-detail" onclick="revealHint('Explora el castillo a su alrededor y entra hasta la parte más alta, desde allí se ven algunos paredones.')">¡Busca aquí!</span>
               </p>
             </div>
             <div class="slide" data-slide="1">
@@ -59,7 +60,7 @@
             <div class="slide" data-slide="2">
               <img src="images/castillo-vista.jpg" alt="Vista Panorámica">
               <p class="carousel-info">
-                <strong>Vista Panorámica:</strong> Hoy, el Centro de Interpretación ofrece vistas a las sierras de Béjar y Francia desde la torre. Desde 1834 alberga el cemenerio municipal.
+                <strong>Vista Panorámica:</strong> Hoy, el Centro de Interpretación ofrece vistas a las sierras de Béjar y Francia desde la torre. Desde 1834 alberga el cementerio municipal.
               </p>
             </div>
             <button class="carousel-btn prev-slide">←</button>
@@ -101,9 +102,9 @@
 
           <p>2. ¿Qué alberga el recinto desde 1834?</p>
           <div id="quiz-opciones-2">
-            <button class="action-btn" onclick="checkAnswer('Discoteca', 'Cementerio', 2)">Incendio</button>
+            <button class="action-btn" onclick="checkAnswer('Discoteca', 'Cementerio', 2)">Discoteca</button>
             <button class="action-btn" onclick="checkAnswer('Cementerio', 'Cementerio', 2)">Cementerio</button>
-            <button class="action-btn" onclick="checkAnswer('Parque infantil', 'Cementerio', 2)">Guerra</button>
+            <button class="action-btn" onclick="checkAnswer('Parque infantil', 'Cementerio', 2)">Parque infantil</button>
           </div>
           <p id="quiz-resultado-2"></p>
           <button class="hint-btn" onclick="showHint('Un descanso muy largo, se puede decir eterno.')">Pista</button>
