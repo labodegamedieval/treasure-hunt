@@ -58,10 +58,11 @@ header h1 {
 #compass-background {
     width: 100%;
     height: auto;
+    border-radius: 50%; /* Hace que la brújula sea redonda */
 }
 
 #compass-arrow {
-    width: 70%;
+    width: 90%; /* Se ajusta a los bordes de la brújula */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -79,7 +80,7 @@ header h1 {
     max-width: 300px;
   }
   #compass-arrow {
-    width: 65%;
+    width: 85%;
   }
 }
 
