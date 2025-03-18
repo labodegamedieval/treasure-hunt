@@ -39,129 +39,98 @@
         <input type="text" id="location-input" placeholder="Ej: Fuente y Portalón">
         <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
         <p id="location-status"></p>
-        <canvas id="sonar-radar" width="200" height="200"></canvas>
+        <div class="compass-container">
+    <img id="compass-arrow" src="images/flecha.png" alt="Brújula" />
+    <p id="distance-info">Calculando distancia...</p>
+</div>
 <audio id="sonar-ping" src="sounds/sonar-ping.mp3" preload="auto"></audio>
 
 <script>
-const canvas = document.getElementById("sonar-radar");
-const ctx = canvas.getContext("2d");
-const audioPing = document.getElementById("sonar-ping");
-
-let angle = 0; // Ángulo del radar
-let lastTime = 0;
-let userLat = null;
-let userLon = null;
-
-// Simulación de paradas con coordenadas GPS (actualízalas con las reales)
+let userLat = null, userLon = null, userHeading = 0;
 const stops = [
-    { lat: 40.001, lon: -5.501, detected: false },  
-    { lat: 40.002, lon: -5.502, detected: false },  
-    { lat: 40.003, lon: -5.503, detected: false }
+    { lat: 40.001, lon: -5.501, name: "Fuente y Portalón" },
+    { lat: 40.002, lon: -5.502, name: "Plaza Mayor" },
+    { lat: 40.003, lon: -5.503, name: "Castillo" }
 ];
 
-// Función para actualizar la ubicación del usuario
+const distanceText = document.getElementById("distance-info");
+const compassArrow = document.getElementById("compass-arrow");
+
+// Actualizar ubicación del usuario
 function updateUserLocation() {
     if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition(
-            function(position) {
-                userLat = position.coords.latitude;
-                userLon = position.coords.longitude;
-                console.log(`Ubicación actualizada: ${userLat}, ${userLon}`);
-            },
-            function(error) {
-                console.error("Error obteniendo GPS:", error);
-            },
-            { enableHighAccuracy: true }
-        );
+        navigator.geolocation.watchPosition(position => {
+            userLat = position.coords.latitude;
+            userLon = position.coords.longitude;
+            updateCompass();
+        }, error => {
+            console.error("Error GPS:", error);
+            distanceText.innerText = "No se pudo obtener la ubicación ❌";
+        }, { enableHighAccuracy: true });
     } else {
-        console.log("Geolocalización no soportada");
+        distanceText.innerText = "Geolocalización no soportada ❌";
     }
 }
 
-// Función para dibujar el radar con detección de paradas
-function animateRadar(timestamp) {
-    if (!lastTime) lastTime = timestamp;
-    const deltaTime = timestamp - lastTime;
-
-    if (deltaTime > 16) { // Control de FPS (~60 FPS)
-        lastTime = timestamp;
-
-        // Limpiar con efecto de desvanecimiento (suaviza la estela)
-        ctx.fillStyle = "rgba(10, 10, 10, 0.15)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Dibujar círculos concéntricos
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
-        ctx.lineWidth = 2;
-        for (let i = 1; i <= 3; i++) {
-            ctx.beginPath();
-            ctx.arc(100, 100, i * 30, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-
-        // Dibujar el rayo del radar
-        const xEnd = 100 + 100 * Math.cos(angle);
-        const yEnd = 100 + 100 * Math.sin(angle);
-        ctx.beginPath();
-        ctx.moveTo(100, 100);
-        ctx.lineTo(xEnd, yEnd);
-        ctx.strokeStyle = "rgba(0, 255, 0, 0.9)";
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        // Filtrar las paradas que están dentro del radio de 50m
-        let visibleStops = [];
-        if (userLat !== null && userLon !== null) {
-            visibleStops = stops.filter(stop => getDistance(userLat, userLon, stop.lat, stop.lon) < 50);
-        }
-
-        // Dibujar solo las paradas dentro del radio del usuario
-        visibleStops.forEach(stop => {
-            // Posición relativa dentro del radar
-            const relativeX = Math.random() * 180 - 90;
-            const relativeY = Math.random() * 180 - 90;
-
-            ctx.beginPath();
-            ctx.arc(100 + relativeX, 100 + relativeY, 5, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(0, 255, 0, 1)";
-            ctx.fill();
-
-            // Detectar si el rayo del radar pasa cerca de la parada
-            const dx = xEnd - (100 + relativeX);
-            const dy = yEnd - (100 + relativeY);
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 10 && !stop.detected) {
-                stop.detected = true; // Evitar que suene varias veces
-                audioPing.play();
-                document.getElementById("location-status").innerText = "Ubicación detectada ✅";
-            }
-        });
-
-        // Movimiento progresivo del radar
-        angle += 0.05;
-        if (angle > Math.PI * 2) angle = 0;
+// Detectar orientación del dispositivo
+function updateUserHeading(event) {
+    if (event.alpha !== null) {
+        userHeading = event.alpha; // Ángulo en grados
+        updateCompass();
     }
-
-    requestAnimationFrame(animateRadar);
 }
 
-// Función para calcular la distancia en metros entre dos coordenadas GPS
+// Función para calcular el ángulo y distancia a la parada más cercana
+function updateCompass() {
+    if (userLat === null || userLon === null) return;
+
+    let nearestStop = null;
+    let minDistance = Infinity;
+
+    stops.forEach(stop => {
+        const distance = getDistance(userLat, userLon, stop.lat, stop.lon);
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestStop = stop;
+        }
+    });
+
+    if (nearestStop) {
+        // Mostrar distancia
+        distanceText.innerText = `📍 Parada: ${nearestStop.name} → ${Math.round(minDistance)}m`;
+
+        // Calcular ángulo hacia la parada
+        const bearing = getBearing(userLat, userLon, nearestStop.lat, nearestStop.lon);
+        const angle = bearing - userHeading;
+
+        // Rotar la flecha
+        compassArrow.style.transform = `rotate(${angle}deg)`;
+    }
+}
+
+// Calcular la distancia entre dos coordenadas GPS (en metros)
 function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371000; // Radio de la Tierra en metros
+    const R = 6371000;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// Iniciar ubicación y animación
+// Calcular el ángulo (bearing) hacia una parada
+function getBearing(lat1, lon1, lat2, lon2) {
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const y = Math.sin(dLon) * Math.cos(lat2 * (Math.PI / 180));
+    const x = Math.cos(lat1 * (Math.PI / 180)) * Math.sin(lat2 * (Math.PI / 180)) -
+        Math.sin(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.cos(dLon);
+    return (Math.atan2(y, x) * (180 / Math.PI) + 360) % 360;
+}
+
+// Iniciar funciones
 updateUserLocation();
-requestAnimationFrame(animateRadar);
+window.addEventListener("deviceorientation", updateUserHeading);
 </script>
 
       </div>
