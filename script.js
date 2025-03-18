@@ -101,53 +101,40 @@ function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDis
   const centerY = canvas.height / 2;
   const maxRadius = Math.min(canvas.width, canvas.height) / 2 - 10;
 
-  // Limpia el canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Limpia el canvas con fondo negro
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Dibuja círculos concéntricos como fondo
+  // Dibuja círculos concéntricos verdes
   for (let r = maxRadius / 3; r <= maxRadius; r += maxRadius / 3) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
-    ctx.strokeStyle = 'rgba(0, 255, 0, 0.2)';
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.3)';
     ctx.lineWidth = 1;
     ctx.stroke();
   }
 
-  // Calcula la posición relativa del objetivo (punto rojo)
-  const latDiff = (targetLat - userLat) * 111320; // Aproximadamente 111,320 metros por grado de latitud
+  // Calcula la posición relativa del objetivo (punto verde parpadeante)
+  const latDiff = (targetLat - userLat) * 111320; // Metros por grado de latitud
   const lngDiff = (targetLng - userLng) * 111320 * Math.cos(userLat * Math.PI / 180); // Ajuste por longitud
-  const scale = maxRadius / maxDistance; // Escala para mapear metros a píxeles
+  const scale = maxRadius / maxDistance; // Escala metros a píxeles
   const targetX = centerX + lngDiff * scale;
   const targetY = centerY - latDiff * scale;
 
-  // Dibuja el punto rojo (objetivo)
+  // Dibuja el punto verde parpadeante (objetivo)
   ctx.beginPath();
   ctx.arc(targetX, targetY, 5, 0, 2 * Math.PI);
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = 'lime';
   ctx.fill();
-
-  // Dibuja el círculo del usuario
-  const radius = Math.max(5, maxRadius * (distance / maxDistance));
-  if (distance <= toleranceRadius) {
-    canvas.classList.add('sonar-active');
-  } else {
-    canvas.classList.remove('sonar-active');
-  }
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-  ctx.fillStyle = distance <= toleranceRadius ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
-  ctx.fill();
-  ctx.strokeStyle = distance <= toleranceRadius ? 'green' : 'red';
-  ctx.lineWidth = 3;
-  ctx.stroke();
+  canvas.classList.add('sonar-active'); // Activa el parpadeo
 
   // Línea de escaneo tipo sonar de submarino
   const now = Date.now() / 1000;
-  const angle = (now * 2) % (2 * Math.PI); // Rotación más rápida
+  const angle = (now * 2) % (2 * Math.PI); // Rotación rápida
   ctx.beginPath();
   ctx.moveTo(centerX, centerY);
   ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
-  ctx.strokeStyle = 'rgba(0, 255, 0, 0.8)';
+  ctx.strokeStyle = 'lime';
   ctx.lineWidth = 2;
   ctx.stroke();
 
@@ -160,6 +147,14 @@ function drawSonarRadar(userLat, userLng, targetLat, targetLng, distance, maxDis
     ctx.strokeStyle = `rgba(0, 255, 0, ${0.8 - i * 0.08})`;
     ctx.lineWidth = 2;
     ctx.stroke();
+  }
+
+  // Indicador de distancia
+  if (distance <= toleranceRadius) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = 'lime';
+    ctx.fill();
   }
 }
 
