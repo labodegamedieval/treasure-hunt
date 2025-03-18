@@ -60,20 +60,29 @@ const distanceText = document.getElementById("distance-info");
 const compassArrow = document.getElementById("compass-arrow");
 const audioPing = document.getElementById("sonar-ping");
 
+// Verifica si el dispositivo tiene GPS y orientación
+function checkDeviceCompatibility() {
+    if (!("geolocation" in navigator)) {
+        distanceText.innerText = "⚠️ GPS no disponible en este dispositivo";
+        return;
+    }
+    if (!window.DeviceOrientationEvent) {
+        distanceText.innerText = "⚠️ Brújula no soportada en este dispositivo";
+        return;
+    }
+    updateUserLocation();
+}
+
 // Actualizar ubicación del usuario
 function updateUserLocation() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition(position => {
-            userLat = position.coords.latitude;
-            userLon = position.coords.longitude;
-            updateCompass();
-        }, error => {
-            console.error("Error GPS:", error);
-            distanceText.innerText = "No se pudo obtener la ubicación ❌";
-        }, { enableHighAccuracy: true });
-    } else {
-        distanceText.innerText = "Geolocalización no soportada ❌";
-    }
+    navigator.geolocation.watchPosition(position => {
+        userLat = position.coords.latitude;
+        userLon = position.coords.longitude;
+        updateCompass();
+    }, error => {
+        console.warn("No se pudo obtener la ubicación");
+        distanceText.innerText = "🚀 Activa el GPS para continuar";
+    }, { enableHighAccuracy: true });
 }
 
 // Detectar orientación del dispositivo
@@ -101,11 +110,11 @@ function updateCompass() {
 
     if (nearestStop) {
         // Mostrar distancia y mensajes dinámicos
-        let message = `📍 Parada: ${nearestStop.name} → ${Math.round(minDistance)}m`;
+        let message = `📍 ${nearestStop.name} → ${Math.round(minDistance)}m`;
         if (minDistance < 10) {
             message = "🏁 ¡Has llegado!";
             if (!nearestStop.detected) {
-                nearestStop.detected = true; // Evita que suene varias veces
+                nearestStop.detected = true;
                 audioPing.play();
             }
         } else if (minDistance < 30) {
@@ -143,6 +152,11 @@ function getBearing(lat1, lon1, lat2, lon2) {
         Math.sin(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.cos(dLon);
     return (Math.atan2(y, x) * (180 / Math.PI) + 360) % 360;
 }
+
+// Iniciar funciones solo si el dispositivo es compatible
+checkDeviceCompatibility();
+window.addEventListener("deviceorientation", updateUserHeading);
+</script>
 
 // Iniciar funciones
 updateUserLocation();
