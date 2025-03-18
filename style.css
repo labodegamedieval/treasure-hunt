@@ -282,3 +282,18 @@ footer a:hover {
 .sonar-active {
   animation: sonarPulse 1s infinite;
 }
+.compass-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#compass-arrow {
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s linear;
+}
+
+#distance-info {
+    font-size: 18px;
+    margin-top: 10px;
+}
