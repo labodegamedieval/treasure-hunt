@@ -50,7 +50,7 @@ const qrCodes = {
   'bodega': { 
     code: 'BODEGA-1600', 
     hint: 'El dintel del escudo oculta algo más.', 
-    curiosity: 'Esta bodega tradicional serrana ha sido cuidadosamente recuperada para ofrecer experiencias con degustaciones de vino de uva Rufete y delicias locales. Al final descubriras el secreto.' 
+    curiosity: 'Esta bodega tradicional serrana ha sido cuidadosamente recuperada para ofrecer experiencias con degustaciones de vino de uva Rufete y delicias locales. Al final descubrirás el secreto.' 
   }
 };
 
@@ -90,9 +90,79 @@ function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// Variable para almacenar el ID del watchPosition
+let watchId = null;
+
+function drawSonarRadar(distance, maxDistance) {
+  const canvas = document.getElementById('sonar-radar');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const maxRadius = Math.min(canvas.width, canvas.height) / 2 - 10;
+
+  // Limpia el canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Dibuja el círculo de fondo (rango máximo)
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, maxRadius, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(0, 255, 0, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Dibuja círculos concéntricos como fondo del sonar
+  for (let r = maxRadius / 3; r <= maxRadius; r += maxRadius / 3) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, r, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Calcula el radio del círculo según la distancia
+  const radius = Math.max(5, maxRadius * (distance / maxDistance));
+  if (distance <= toleranceRadius) {
+    canvas.classList.add('sonar-active');
+  } else {
+    canvas.classList.remove('sonar-active');
+  }
+
+  // Dibuja el círculo principal del sonar
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+  ctx.fillStyle = distance <= toleranceRadius ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)';
+  ctx.fill();
+  ctx.strokeStyle = distance <= toleranceRadius ? 'green' : 'red';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Líneas de escaneo giratorias
+  const now = Date.now() / 1000; // Tiempo en segundos para animación
+  const angle = (now % (2 * Math.PI)); // Rotación continua
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
+  ctx.strokeStyle = 'rgba(0, 255, 0, 0.7)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Segunda línea opuesta para efecto simétrico
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY);
+  ctx.lineTo(centerX + maxRadius * Math.cos(angle + Math.PI), centerY + maxRadius * Math.sin(angle + Math.PI));
+  ctx.stroke();
+}
+
 function checkLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
+    // Limpia cualquier watchPosition previo
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+    }
+
+    watchId = navigator.geolocation.watchPosition(
       (position) => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
@@ -102,9 +172,11 @@ function checkLocation() {
 
         if (targetLocation) {
           const distance = getDistanceFromLatLonInMeters(userLat, userLng, targetLocation.lat, targetLocation.lng);
+          drawSonarRadar(distance, 100); // 100 metros como distancia máxima visible
           if (distance <= toleranceRadius) {
             alert('¡Ubicación verificada!');
             unlockContent();
+            navigator.geolocation.clearWatch(watchId); // Detiene el rastreo
           } else {
             document.getElementById('location-status').textContent = `Estás a ${Math.round(distance)} metros. Acércate más (máximo ${toleranceRadius} metros). Precisión: ${Math.round(accuracy)}m`;
             playSound('error-sound');
@@ -119,6 +191,20 @@ function checkLocation() {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+
+    // Animación continua del sonar
+    function animateSonar() {
+      const stop = window.location.pathname.split('/').pop().replace('.html', '');
+      const targetLocation = locations[stop];
+      if (targetLocation && document.getElementById('location-check').style.display !== 'none') {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const distance = getDistanceFromLatLonInMeters(pos.coords.latitude, pos.coords.longitude, targetLocation.lat, targetLocation.lng);
+          drawSonarRadar(distance, 100);
+        });
+        requestAnimationFrame(animateSonar);
+      }
+    }
+    animateSonar();
   } else {
     document.getElementById('location-status').textContent = 'Geolocalización no soportada. Usa verificación manual.';
     playSound('error-sound');
@@ -231,7 +317,7 @@ function setupVisualChallenges() {
     ],
     'ermita': [
       { question: '¿Qué rodea la ermita?', options: ['Parques', 'Montañas', 'Ciudad'], correct: 'Parques' },
-      { question: '¿Qué imagen, traìda de Italia, hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen' }
+      { question: '¿Qué imagen, traída de Italia, hay dentro?', options: ['Virgen', 'Cruz', 'Santo'], correct: 'Virgen' }
     ],
     'puente': [
       { question: '¿Qué material predomina?', options: ['Madera', 'Piedra', 'Ladrillo'], correct: 'Piedra' },
