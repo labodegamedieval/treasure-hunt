@@ -49,13 +49,14 @@
 <script>
 let userLat = null, userLon = null, userHeading = 0;
 const stops = [
-    { lat: 40.001, lon: -5.501, name: "Fuente y Portalón" },
-    { lat: 40.002, lon: -5.502, name: "Plaza Mayor" },
-    { lat: 40.003, lon: -5.503, name: "Castillo" }
+    { lat: 40.001, lon: -5.501, name: "Fuente y Portalón", detected: false },
+    { lat: 40.002, lon: -5.502, name: "Plaza Mayor", detected: false },
+    { lat: 40.003, lon: -5.503, name: "Castillo", detected: false }
 ];
 
 const distanceText = document.getElementById("distance-info");
 const compassArrow = document.getElementById("compass-arrow");
+const audioPing = document.getElementById("sonar-ping");
 
 // Actualizar ubicación del usuario
 function updateUserLocation() {
@@ -97,8 +98,20 @@ function updateCompass() {
     });
 
     if (nearestStop) {
-        // Mostrar distancia
-        distanceText.innerText = `📍 Parada: ${nearestStop.name} → ${Math.round(minDistance)}m`;
+        // Mostrar distancia y mensajes dinámicos
+        let message = `📍 Parada: ${nearestStop.name} → ${Math.round(minDistance)}m`;
+        if (minDistance < 10) {
+            message = "🏁 ¡Has llegado!";
+            if (!nearestStop.detected) {
+                nearestStop.detected = true; // Evita que suene varias veces
+                audioPing.play();
+            }
+        } else if (minDistance < 30) {
+            message = "👣 Estás muy cerca...";
+        } else if (minDistance < 100) {
+            message = "📍 Sigue adelante, ya casi llegas.";
+        }
+        distanceText.innerText = message;
 
         // Calcular ángulo hacia la parada
         const bearing = getBearing(userLat, userLon, nearestStop.lat, nearestStop.lon);
@@ -128,6 +141,11 @@ function getBearing(lat1, lon1, lat2, lon2) {
         Math.sin(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.cos(dLon);
     return (Math.atan2(y, x) * (180 / Math.PI) + 360) % 360;
 }
+
+// Iniciar funciones
+updateUserLocation();
+window.addEventListener("deviceorientation", updateUserHeading);
+</script>
 
 // Iniciar funciones
 updateUserLocation();
