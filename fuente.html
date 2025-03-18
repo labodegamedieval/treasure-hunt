@@ -109,6 +109,32 @@ function updateCompass() {
     });
 
     if (nearestStop) {
+        let message = `📍 ${nearestStop.name} → ${Math.round(minDistance)}m`;
+
+        if (minDistance < 10) {
+            message = "🏁 ¡Has llegado!";
+            if (!nearestStop.detected) {
+                nearestStop.detected = true;
+                audioPing.play();
+            }
+        } else if (minDistance < 30) {
+            message = "👣 Estás muy cerca...";
+        } else if (minDistance < 500) {
+            message = "📍 Sigue adelante, ya casi llegas.";
+        } else if (minDistance > 10000) {
+            message = "⚠️ Ubicación no detectada correctamente.";
+        }
+        
+        distanceText.innerText = message;
+
+        const bearing = getBearing(userLat, userLon, nearestStop.lat, nearestStop.lon);
+        const angle = bearing - userHeading;
+        compassArrow.style.transform = `rotate(${angle}deg)`;
+    }
+}
+    });
+
+    if (nearestStop) {
         // Mostrar distancia y mensajes dinámicos
         let message = `📍 ${nearestStop.name} → ${Math.round(minDistance)}m`;
         if (minDistance < 10) {
