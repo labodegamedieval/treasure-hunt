@@ -24,7 +24,9 @@ body {
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.95);
+  background: url('images/pergamino.jpg'); /* Usar fondo pergamino en lugar de blanco */
+  background-size: cover;
+  background-position: center;
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
   border: 2px solid #d4a017;
@@ -44,20 +46,20 @@ header h1 {
 .action-btn {
   background-color: #8b4513;
   color: #f5e8c7;
-  padding: 15px 25px;
-  border: 3px solid #d4a017;
-  border-radius: 8px;
+  padding: 12px 20px;
+  border: 2px solid #d4a017;
+  border-radius: 6px;
   cursor: pointer;
   font-family: 'Cinzel', serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.2s;
-  margin: 10px;
+  margin: 5px;
 }
 
 .action-btn:hover {
   background-color: #a0522d;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* Brújula */
@@ -66,6 +68,12 @@ header h1 {
     width: 100%;
     max-width: 400px;
     margin: auto;
+    background: url('images/pergamino.jpg'); /* Fondo pergamino en la brújula */
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%; /* Hace que la brújula sea redonda */
+    padding: 15px;
+    display: inline-block;
 }
 
 .compass-wrapper {
@@ -78,11 +86,12 @@ header h1 {
 #compass-background {
     width: 100%;
     height: auto;
-    border-radius: 50%; /* Hace que la brújula sea redonda */
+    display: block;
+    margin: auto;
 }
 
 #compass-arrow {
-    width: 90%; /* Se ajusta a los bordes de la brújula */
+    width: 85%; /* Ajuste para centrar con la circunferencia */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -100,10 +109,10 @@ header h1 {
     max-width: 300px;
   }
   #compass-arrow {
-    width: 85%;
+    width: 80%;
   }
   .action-btn {
-    font-size: 20px;
-    padding: 18px 30px;
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }
