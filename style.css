@@ -268,16 +268,17 @@ footer a:hover {
   display: block;
   margin: 20px auto;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.2); /* Fondo oscuro tenue */
+  background: #000; /* Fondo negro como sonar de submarino */
+  border: 2px solid #00ff00; /* Borde verde */
 }
 
-/* Efecto pulsante cuando estás cerca */
+/* Efecto pulsante para el punto verde */
 @keyframes sonarPulse {
-  0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
-  70% { box-shadow: 0 0 0 20px rgba(0, 255, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
 }
 
 .sonar-active {
-  animation: sonarPulse 2s infinite;
+  animation: sonarPulse 1s infinite;
 }
