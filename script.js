@@ -473,3 +473,25 @@ document.addEventListener('DOMContentLoaded', () => {
   setupQuiz();
   setupInteractivity();
 });
+
+// Efecto de máquina de escribir para la narrativa
+function narrar(texto, elementoId = "texto-narrativo") {
+    const el = document.getElementById(elementoId);
+    if (!el) return;
+    el.innerHTML = "";
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < texto.length) {
+            el.innerHTML += texto.charAt(i);
+            i++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 30);
+}
+
+// Inicialización automática
+document.addEventListener("DOMContentLoaded", () => {
+    const intro = document.body.dataset.narrativa;
+    if (intro) narrar(intro);
+});
