@@ -3,39 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Castillo de Gonzalo - Aventura</title>
+    <title>Castillo de Gonzalo - El Misterio</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" type="image/x-icon" href="images/escudo-borrado.ico" />
 </head>
-<body data-narrativa="Las imponentes murallas del Castillo de San Martín se alzan ante ti. Un guardia veterano custodia la entrada y te mira con sospecha. 'No muchos vienen preguntando por el viejo Gonzalo...', gruñe.">
+<body data-stop="castillo" data-narrativa="Llegas a las faldas del castillo. El viento sopla con fuerza contra las piedras del siglo XIII. Un guardia veterano te observa desde la entrada. '¿Buscas respuestas sobre Gonzalo?', pregunta con voz ronca.">
 
     <div class="escena" style="background-image: url('images/fondo-castillo.jpg');">
         
-        <button class="music-btn" onclick="toggleMusic()">🎵 Sonido</button>
+        <button class="music-btn" onclick="toggleMusic()">🎵 <span class="music-icon">Sonido</span></button>
 
-        <div class="interfaz-inferior">
-            <div id="texto-narrativo"></div>
+        <div id="location-check" class="interfaz-inferior">
+            <div id="texto-narrativo">El guardia bloquea el paso: 'Solo los que demuestren estar físicamente aquí pueden entrar. El mapa de Gonzalo no miente'.</div>
+            <div class="opciones-narrativas">
+                <button class="btn-opcion" onclick="checkLocation()">📍 Permitir que use mi GPS</button>
+                <button class="btn-opcion" onclick="mostrarEntradaManual()">⌨️ Escribir dónde estoy</button>
+            </div>
+            <div id="location-status" style="font-size: 0.8rem; margin-top: 10px;"></div>
             
-            <div class="opciones-narrativas" id="opciones-inicio">
-                <button class="btn-opcion" onclick="mostrarReto('reto-visual', 'saludar_pueblo')">🤝 Explicar que buscas la verdad con respeto</button>
-                <button class="btn-opcion" onclick="mostrarReto('reto-quiz', 'investigar_solo')">💰 Ofrecerle una moneda para que te deje pasar</button>
+            <div id="manual-input" style="display:none; margin-top:10px;">
+                <input type="text" id="location-input" placeholder="Nombre del lugar...">
+                <button class="btn-opcion" onclick="checkLocationManual()">Validar</button>
+            </div>
+        </div>
+
+        <div id="game-content" class="interfaz-inferior" style="display:none;">
+            <div id="texto-narrativo-game">El guardia asiente: 'Estás en el lugar correcto. Pero Gonzalo era un hombre de secretos. Pruébame que eres digno de su crónica'.</div>
+            
+            <div class="opciones-narrativas" id="opciones-principales">
+                <button class="btn-opcion" onclick="iniciarReto('visual')">🤝 Demostrar que he observado la muralla</button>
+                <button class="btn-opcion" onclick="iniciarReto('quiz')">📚 Demostrar que conozco la historia</button>
             </div>
 
-            <div class="opciones-narrativas" id="reto-visual" style="display:none;">
-                <p style="width:100%; font-style:italic; font-size:0.9rem; color:#cd853f;">El guardia te pone a prueba: 'Si eres quien dices ser, sabrás qué destaca en nuestra muralla sur...'</p>
-                <button class="btn-opcion" onclick="validarReto(true, '¡Exacto! Gonzalo siempre decía que esas piedras hablaban. Pasa, forastero.')">La gran muralla de sillería</button>
-                <button class="btn-opcion" onclick="validarReto(false, 'Mientes. No has mirado con atención. Vete.')">Un foso lleno de agua</button>
+            <div id="contenedor-visual" style="display:none;">
+                <p id="pregunta-visual" class="pregunta-narrativa"></p>
+                <div id="visual-opciones-1" class="opciones-narrativas"></div>
+                <div id="visual-resultado-1"></div>
             </div>
 
-            <div class="opciones-narrativas" id="reto-quiz" style="display:none;">
-                <p style="width:100%; font-style:italic; font-size:0.9rem; color:#cd853f;">El guardia ríe: 'Guarda tu oro. Si quieres entrar, dime: ¿en qué siglo se levantó esta torre?'</p>
-                <button class="btn-opcion" onclick="validarReto(true, 'Sabes de historia... entra, pero no causes problemas.')">Siglo XV</button>
-                <button class="btn-opcion" onclick="validarReto(false, 'Ni con oro entraría alguien tan ignorante. Largo.')">Siglo XVIII</button>
+            <div id="contenedor-quiz" style="display:none;">
+                <p id="pregunta-quiz" class="pregunta-narrativa"></p>
+                <div id="quiz-opciones-1" class="opciones-narrativas"></div>
+                <div id="quiz-resultado-1"></div>
             </div>
 
-            <button id="btn-siguiente" style="display:none;" onclick="window.location.href='explorar.html'">
-                🗺️ Continuar la crónica hacia el mapa...
-            </button>
+            <div id="recompensa" style="display:none;">
+                <p>El guardia se aparta: 'Gonzalo dejó esto para ti...'.</p>
+                <p>🧩 Fragmento: <strong id="message-piece" style="color: gold;"></strong></p>
+                <button id="continue-button" class="btn-opcion" style="background: #27ae60;" onclick="window.location.href='explorar.html'">🗺️ Volver al Mapa</button>
+            </div>
         </div>
     </div>
 
@@ -44,40 +60,35 @@
     <audio id="error-sound" src="sounds/error.mp3"></audio>
 
     <script src="scripts/script.js"></script>
-
     <script>
-        // Funciones específicas para la lógica de esta página
-        function mostrarReto(idReto, tipoDecision) {
-            // Guardamos la decisión en el sistema de "Karma"
-            if(window.tomarDecision) tomarDecision(tipoDecision);
-            
-            document.getElementById('opciones-inicio').style.display = 'none';
-            document.getElementById(idReto).style.display = 'flex';
-            
-            if(idReto === 'reto-visual') {
-                narrar("El guardia cruza los brazos y te examina de arriba a abajo...");
+        // LÓGICA ESPECÍFICA PARA EL CASTILLO
+        function mostrarEntradaManual() {
+            document.getElementById('manual-input').style.display = 'block';
+        }
+
+        function iniciarReto(tipo) {
+            document.getElementById('opciones-principales').style.display = 'none';
+            if(tipo === 'visual') {
+                document.getElementById('contenedor-visual').style.display = 'block';
+                setupVisualChallenges(); // Llama a la función de tu script.js original
             } else {
-                narrar("El guardia mira la moneda, luego a ti, y niega con la cabeza...");
+                document.getElementById('contenedor-quiz').style.display = 'block';
+                setupQuiz(); // Llama a la función de tu script.js original
             }
         }
 
-        function validarReto(esCorrecto, mensaje) {
-            document.getElementById('reto-visual').style.display = 'none';
-            document.getElementById('reto-quiz').style.display = 'none';
+        // Sobrescribimos ligeramente el checkCompletion para que se adapte a la narrativa
+        function checkCompletion() {
+            const stop = 'castillo';
+            const v1 = localStorage.getItem(`visual-${stop}-1`) === 'true';
+            const q1 = localStorage.getItem(`quiz-${stop}-1`) === 'true';
             
-            if(esCorrecto) {
-                const sound = document.getElementById("success-sound");
-                if(sound) sound.play();
-                narrar(mensaje);
-                setTimeout(() => {
-                    document.getElementById('btn-siguiente').style.display = 'block';
-                    // Guardamos que el castillo ha sido completado
-                    localStorage.setItem('castillo-completed', 'true');
-                }, 2000);
-            } else {
-                const sound = document.getElementById("error-sound");
-                if(sound) sound.play();
-                narrar(mensaje + " (Has fallado, recarga la página para intentar otra táctica).");
+            // Si supera uno de los dos caminos (o ambos)
+            if (v1 || q1) {
+                document.getElementById('contenedor-visual').style.display = 'none';
+                document.getElementById('contenedor-quiz').style.display = 'none';
+                document.getElementById('recompensa').style.display = 'block';
+                document.getElementById('message-piece').textContent = "El secreto";
             }
         }
     </script>
