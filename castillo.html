@@ -1,147 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🏰 El Castillo de Gonzalo</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/jpeg" href="images/escudo-borrado.jpg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Castillo de Gonzalo - Aventura</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" type="image/x-icon" href="images/escudo-borrado.ico" />
 </head>
-<body>
-  <div class="container">
-    <header>
-      <h1>🏰 El Castillo de Gonzalo</h1>
-      <div class="music-control">
-        <button class="music-btn" onclick="toggleMusic()">
-          <span class="music-icon">🎵</span> Pausar Música
-        </button>
-      </div>
-      <div class="stop-selector">
-        <button class="action-btn" onclick="window.location.href='castillo.html'">Castillo</button>
-        <button class="action-btn" onclick="window.location.href='plaza.html'">Plaza</button>
-        <button class="action-btn" onclick="window.location.href='iglesia.html'">Iglesia</button>
-        <button class="action-btn" onclick="window.location.href='fuente.html'">Fuente y Portalón</button>
-        <button class="action-btn" onclick="window.location.href='ermita.html'">Ermita</button>
-        <button class="action-btn" onclick="window.location.href='puente.html'">Puente</button>
-        <button class="action-btn" onclick="window.location.href='bodega.html'">Bodega</button>
-        <button class="action-btn" onclick="window.location.href='cronica.html'">Crónica</button>
-        <button class="action-btn" onclick="window.location.href='guia.html'">Guía</button>
-      </div>
-    </header>
+<body data-narrativa="Las imponentes murallas del Castillo de San Martín se alzan ante ti. Un guardia veterano custodia la entrada y te mira con sospecha. 'No muchos vienen preguntando por el viejo Gonzalo...', gruñe.">
 
-    <section id="content">
-      <div class="stop-icon">🏰</div>
-      <div id="location-check">
-        <h2>Verifica tu ubicación</h2>
-        <p>Acércate a la puerta principal del Castillo de San Martín para iniciar la búsqueda del mensaje.</p>
-        <button class="action-btn" onclick="checkLocation()">Verificar GPS</button>
-        <p>O ingresa el nombre:</p>
-        <input type="text" id="location-input" placeholder="Ej: Castillo">
-        <button class="action-btn" onclick="checkLocationManual()">Verificar Manual</button>
-        <p id="location-status"></p>
-        <canvas id="sonar-radar" width="200" height="200"></canvas>
-      </div>
+    <div class="escena" style="background-image: url('images/fondo-castillo.jpg');">
+        
+        <button class="music-btn" onclick="toggleMusic()">🎵 Sonido</button>
 
-      <div id="game-content" style="display: none;">
-        <div class="content-wrapper">
-          <div class="carousel">
-            <div class="slide active" data-slide="0">
-              <img src="images/castillo-entrada.jpg" alt="Entrada del Castillo">
-              <p class="carousel-info">
-                <strong>Entrada Fortificada:</strong> Construida en el siglo XIII como defensa en la Reconquista. En el siglo XV el castillo fue remodelado en palacio por el Conde de Miranda. También sirvió como cárcel en el siglo XVIII. <span class="hidden-detail" onclick="revealHint('Explora el castillo a su alrededor y entra hasta la parte más alta, desde allí se ven algunos paredones.')">¡Busca aquí!</span>
-              </p>
+        <div class="interfaz-inferior">
+            <div id="texto-narrativo"></div>
+            
+            <div class="opciones-narrativas" id="opciones-inicio">
+                <button class="btn-opcion" onclick="mostrarReto('reto-visual', 'saludar_pueblo')">🤝 Explicar que buscas la verdad con respeto</button>
+                <button class="btn-opcion" onclick="mostrarReto('reto-quiz', 'investigar_solo')">💰 Ofrecerle una moneda para que te deje pasar</button>
             </div>
-            <div class="slide" data-slide="1">
-              <img src="images/castillo-torre.jpg" alt="Torre del Homenaje">
-              <p class="carousel-info">
-                <strong>Torre del Homenaje:</strong> Dañada por un rayo en el siglo XX y restaurada para contar su historia, ofrece una de las mejores vistas de toda la Sierra de Francia.
-              </p>
-            </div>
-            <div class="slide" data-slide="2">
-              <img src="images/castillo-vista.jpg" alt="Vista Panorámica">
-              <p class="carousel-info">
-                <strong>Vista Panorámica:</strong> Hoy, el Centro de Interpretación ofrece vistas a las sierras de Béjar y Francia desde la torre. Desde 1834 alberga el cementerio municipal.
-              </p>
-            </div>
-            <button class="carousel-btn prev-slide">←</button>
-            <button class="carousel-btn next-slide">→</button>
-          </div>
 
-          <div class="visual-challenge">
-            <h2>Retos Visuales: Afina tus sentidos</h2>
-            <p>1. ¿Qué marcó la torre del homenaje?</p>
-            <div id="visual-opciones-1">
-              <button class="action-btn" onclick="checkVisualAnswer('Incendio', 'Rayo', 1)">Incendio</button>
-              <button class="action-btn" onclick="checkVisualAnswer('Rayo', 'Rayo', 1)">Rayo</button>
-              <button class="action-btn" onclick="checkVisualAnswer('Terremoto', 'Rayo', 1)">Terremoto</button>
+            <div class="opciones-narrativas" id="reto-visual" style="display:none;">
+                <p style="width:100%; font-style:italic; font-size:0.9rem; color:#cd853f;">El guardia te pone a prueba: 'Si eres quien dices ser, sabrás qué destaca en nuestra muralla sur...'</p>
+                <button class="btn-opcion" onclick="validarReto(true, '¡Exacto! Gonzalo siempre decía que esas piedras hablaban. Pasa, forastero.')">La gran muralla de sillería</button>
+                <button class="btn-opcion" onclick="validarReto(false, 'Mientes. No has mirado con atención. Vete.')">Un foso lleno de agua</button>
             </div>
-            <p id="visual-resultado-1"></p>
-            <button class="hint-btn" onclick="showHint('Un relámpago del siglo XX dejó su huella.')">Pista</button>
 
-            <p>2. ¿Qué destaca en la entrada fortificada?</p>
-            <div id="visual-opciones-2">
-              <button class="action-btn" onclick="checkVisualAnswer('Arcos', 'Muralla', 2)">Arcos</button>
-              <button class="action-btn" onclick="checkVisualAnswer('Muralla', 'Muralla', 2)">Muralla</button>
-              <button class="action-btn" onclick="checkVisualAnswer('Torreones', 'Muralla', 2)">Torreones</button>
+            <div class="opciones-narrativas" id="reto-quiz" style="display:none;">
+                <p style="width:100%; font-style:italic; font-size:0.9rem; color:#cd853f;">El guardia ríe: 'Guarda tu oro. Si quieres entrar, dime: ¿en qué siglo se levantó esta torre?'</p>
+                <button class="btn-opcion" onclick="validarReto(true, 'Sabes de historia... entra, pero no causes problemas.')">Siglo XV</button>
+                <button class="btn-opcion" onclick="validarReto(false, 'Ni con oro entraría alguien tan ignorante. Largo.')">Siglo XVIII</button>
             </div>
-            <p id="visual-resultado-2"></p>
-            <button class="hint-btn" onclick="showHint('Es lo que rodea la entrada.')">Pista</button>
-          </div>
+
+            <button id="btn-siguiente" style="display:none;" onclick="window.location.href='explorar.html'">
+                🗺️ Continuar la crónica hacia el mapa...
+            </button>
         </div>
+    </div>
 
-        <div class="quiz">
-          <h2>Quiz: Descubre el mensaje</h2>
-          <p>1. ¿En qué siglo nació este castillo?</p>
-          <div id="quiz-opciones-1">
-            <button class="action-btn" onclick="checkAnswer('XII', 'XIII', 1)">XII</button>
-            <button class="action-btn" onclick="checkAnswer('XIII', 'XIII', 1)">XIII</button>
-            <button class="action-btn" onclick="checkAnswer('XIV', 'XIII', 1)">XIV</button>
-          </div>
-          <p id="quiz-resultado-1"></p>
-          <button class="hint-btn" onclick="showHint('Fue durante la Reconquista.')">Pista</button>
+    <audio id="background-music" src="sounds/musica-medieval.mp3" loop></audio>
+    <audio id="success-sound" src="sounds/success.mp3"></audio>
+    <audio id="error-sound" src="sounds/error.mp3"></audio>
 
-          <p>2. ¿Qué alberga el recinto desde 1834?</p>
-          <div id="quiz-opciones-2">
-            <button class="action-btn" onclick="checkAnswer('Discoteca', 'Cementerio', 2)">Discoteca</button>
-            <button class="action-btn" onclick="checkAnswer('Cementerio', 'Cementerio', 2)">Cementerio</button>
-            <button class="action-btn" onclick="checkAnswer('Parque infantil', 'Cementerio', 2)">Parque infantil</button>
-          </div>
-          <p id="quiz-resultado-2"></p>
-          <button class="hint-btn" onclick="showHint('Un descanso muy largo, se puede decir eterno.')">Pista</button>
+    <script src="scripts/script.js"></script>
 
-          <p>3. ¿Qué ofrece hoy el castillo?</p>
-          <div id="quiz-opciones-3">
-            <button class="action-btn" onclick="checkAnswer('Museo', 'Centro de Interpretación', 3)">Museo</button>
-            <button class="action-btn" onclick="checkAnswer('Centro de Interpretación', 'Centro de Interpretación', 3)">Centro de Interpretación</button>
-            <button class="action-btn" onclick="checkAnswer('Biblioteca', 'Centro de Interpretación', 3)">Biblioteca</button>
-          </div>
-          <p id="quiz-resultado-3"></p>
-          <button class="hint-btn" onclick="showHint('¿De verdad necesitas una pista? Tiene que ver con la biosfera.')">Pista</button>
-        </div>
+    <script>
+        // Funciones específicas para la lógica de esta página
+        function mostrarReto(idReto, tipoDecision) {
+            // Guardamos la decisión en el sistema de "Karma"
+            if(window.tomarDecision) tomarDecision(tipoDecision);
+            
+            document.getElementById('opciones-inicio').style.display = 'none';
+            document.getElementById(idReto).style.display = 'flex';
+            
+            if(idReto === 'reto-visual') {
+                narrar("El guardia cruza los brazos y te examina de arriba a abajo...");
+            } else {
+                narrar("El guardia mira la moneda, luego a ti, y niega con la cabeza...");
+            }
+        }
 
-        <div id="continue-button" style="display: none;">
-          <button class="action-btn" onclick="window.location.href='felicitaciones.html?stop=castillo'">Continuar búsqueda</button>
-        </div>
-
-        <p class="info">
-          <strong>Fragmento del Mensaje:</strong> <span id="message-piece" style="display: none;">"El secreto"</span><br>
-          <strong>QR en el pueblo:</strong> CASTILLO-1523 (cerca de la entrada).<br>
-          <strong>Dato Curioso:</strong> Cerámicas y monedas del siglo XIII halladas aquí inspiraron a Gonzalo.
-        </p>
-      </div>
-    </section>
-
-    <audio id="success-sound" src="sounds/success.mp3" preload="auto"></audio>
-    <audio id="error-sound" src="sounds/error.mp3" preload="auto"></audio>
-    <audio id="coins-sound" src="sounds/coins.mp3" preload="auto"></audio>
-    <audio id="ambient-sound" src="sounds/musica-medieval-2.mp3" preload="auto" loop></audio>
-    <audio id="sonar-ping" src="sounds/sonar-ping.mp3" preload="auto"></audio
-  </div>
-
-  <footer>
-    <p>© 2025 La Bodega Medieval | <a href="https://www.labodegamedieval.es" target="_blank">Reserva tu visita</a></p>
-  </footer>
-
-  <script src="script.js"></script>
+        function validarReto(esCorrecto, mensaje) {
+            document.getElementById('reto-visual').style.display = 'none';
+            document.getElementById('reto-quiz').style.display = 'none';
+            
+            if(esCorrecto) {
+                const sound = document.getElementById("success-sound");
+                if(sound) sound.play();
+                narrar(mensaje);
+                setTimeout(() => {
+                    document.getElementById('btn-siguiente').style.display = 'block';
+                    // Guardamos que el castillo ha sido completado
+                    localStorage.setItem('castillo-completed', 'true');
+                }, 2000);
+            } else {
+                const sound = document.getElementById("error-sound");
+                if(sound) sound.play();
+                narrar(mensaje + " (Has fallado, recarga la página para intentar otra táctica).");
+            }
+        }
+    </script>
 </body>
 </html>
